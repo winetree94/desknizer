@@ -1,0 +1,7 @@
+{
+  "name": "@note/base",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

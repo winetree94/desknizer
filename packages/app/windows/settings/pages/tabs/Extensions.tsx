@@ -6,7 +6,7 @@ export function Extensions() {
   const [extensions, setExtensions] = useState([]);
 
   useEffect(() => {
-    window.electron.invoke('get-extensions').then((extensions) => {
+    window.electron.invoke<void, {}>('get-extensions').then((extensions) => {
       console.log(extensions);
     });
   }, []);

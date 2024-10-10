@@ -1,13 +1,98 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
+import { uniqueId } from 'lodash';
 import path from 'path';
-import './tray';
 
-declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const MAIN_WINDOW_VITE_NAME: string;
-declare const SETTINGS_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const SETTINGS_WINDOW_VITE_NAME: string;
-declare const NOTE_WINDOW_VITE_DEV_SERVER_URL: string;
-declare const NOTE_WINDOW_VITE_NAME: string;
+export interface Extension {
+  id: string;
+  name: string;
+  description: string;
+  enable: boolean;
+  meta: Record<string, any>;
+}
+
+const EXTENSIONS = [
+  {
+    id: uniqueId('extension-'),
+    name: 'Note',
+    description: 'A simple note taking extension',
+    enable: true,
+    meta: {},
+  },
+  {
+    id: uniqueId('extension-'),
+    name: 'Todo',
+    description: 'A simple todo list extension',
+    enable: true,
+    meta: {},
+  },
+];
+
+export interface ExtensionData {
+  id: string;
+  extensionId: string;
+  data: Record<string, any>;
+}
+
+const EXTENSION_DATA = [
+  {
+    id: uniqueId('extension-data-'),
+    extensionId: EXTENSIONS[0].id,
+    data: {
+      content: 'Hello World 1',
+    },
+  },
+  {
+    id: uniqueId('extension-data-'),
+    extensionId: EXTENSIONS[0].id,
+    data: {
+      content: 'Hello World 2',
+    },
+  },
+];
+
+const WIDGETS = [
+  {
+    id: uniqueId('widget-'),
+    extensionId: EXTENSIONS[0].id,
+    dataId: EXTENSION_DATA[0].id,
+    rect: {
+      x: 0,
+      y: 0,
+      width: 200,
+      height: 200,
+    },
+  },
+];
+
+let tray: Tray | null = null;
+
+app.whenReady().then(() => {
+  tray = new Tray(path.join(__dirname, './icon.png'));
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Settings',
+      type: 'normal',
+      click: () => {
+        createSettingsWindow();
+      },
+    },
+    {
+      label: 'Item2',
+      type: 'normal',
+    },
+    {
+      label: 'Quit',
+      type: 'normal',
+      click: () => {
+        app.quit();
+      },
+    },
+  ]);
+
+  tray.setToolTip('This is my application.');
+  tray.setContextMenu(contextMenu);
+});
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -27,7 +112,7 @@ const createMainWindow = () => {
     // skipTaskbar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
+      // nodeIntegration: true,
     },
   });
 
@@ -75,18 +160,17 @@ const createSettingsWindow = () => {
   // Create the browser window.
 
   const mainWindow = new BrowserWindow({
-    width: 200,
-    height: 200,
+    width: 800,
+    height: 600,
     // frame: false,
     // transparent: true,
     // fullscreen: true,
     // skipTaskbar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
     },
   });
-
-  // mainWindow.setIgnoreMouseEvents(true);
 
   // and load the index.html of the app.
   if (SETTINGS_WINDOW_VITE_DEV_SERVER_URL) {
@@ -101,6 +185,12 @@ const createSettingsWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
+ipcMain.handle('get-extensions', (event, args) => {
+  return EXTENSIONS;
+});
+
+ipcMain.on('open-extension-manager', (event, args) => {});
+
 ipcMain.on('create-widget', (event, args) => {
   if (args.type === 'note') {
     createNoteWindow();
@@ -111,7 +201,7 @@ ipcMain.on('create-widget', (event, args) => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  createMainWindow();
+  // createMainWindow();
   // createSettingsWindow();
 });
 
@@ -120,7 +210,7 @@ app.on('ready', () => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    // app.quit();
   }
 });
 
@@ -128,7 +218,7 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createMainWindow();
+    // createMainWindow();
     // createSettingsWindow();
   }
 });

@@ -48,6 +48,10 @@ const config: ForgeConfig = {
           name: 'note_window',
           config: 'vite.renderer.note.config.ts',
         },
+        {
+          name: 'note_manager_window',
+          config: 'vite.renderer.note-manager.config.ts',
+        },
       ],
     }),
     // Fuses are used to enable/disable various Electron functionality

@@ -5,7 +5,9 @@
     "start:app": "yarn workspace @note/app start",
     "start:server": "yarn workspace @note/server dev"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
 }

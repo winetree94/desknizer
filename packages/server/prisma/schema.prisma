@@ -10,44 +10,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            Int             @id @default(autoincrement())
-  userName      String
-  extensions    Extension[]
-  ExtensionItem ExtensionItem[]
-  Widget        Widget[]
+model Extension {
+  id            String          @id @default(uuid())
+  name          String
+  description   String
+  enable        Boolean
+  UserExtension UserExtension[]
 }
 
-model Extension {
-  id             Int             @id @default(autoincrement())
-  userId         Int?
-  User           User?           @relation(fields: [userId], references: [id])
+model User {
+  id            String              @id @default(uuid())
+  userName      String
+  extensions    UserExtension[]
+  ExtensionItem UserExtensionItem[]
+  Widget        UserWidget[]
+}
+
+model UserExtension {
+  id             String              @id @default(uuid())
+  extensionId    String
+  extension      Extension           @relation(fields: [extensionId], references: [id])
+  userId         String
+  User           User?               @relation(fields: [userId], references: [id])
   name           String
   description    String
-  enabled        Boolean
   meta           String
-  extensionItems ExtensionItem[]
-  Widget         Widget[]
+  extensionItems UserExtensionItem[]
+  Widget         UserWidget[]
 }
 
-model ExtensionItem {
-  id          Int        @id @default(autoincrement())
-  userId      Int
-  user        User       @relation(fields: [userId], references: [id])
-  extensionId Int?
-  Extension   Extension? @relation(fields: [extensionId], references: [id])
+model UserExtensionItem {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  extensionId String
+  Extension   UserExtension @relation(fields: [extensionId], references: [id])
   data        String
-  Widget      Widget[]
+  Widget      UserWidget[]
 }
 
-model Widget {
-  id              Int           @id @default(autoincrement())
-  extensionId     Int
-  extension       Extension     @relation(fields: [extensionId], references: [id])
-  extensionItemId Int
-  extensionItem   ExtensionItem @relation(fields: [extensionItemId], references: [id])
-  userId          Int
-  user            User          @relation(fields: [userId], references: [id])
+model UserWidget {
+  id              String            @id @default(uuid())
+  extensionId     String
+  extension       UserExtension     @relation(fields: [extensionId], references: [id])
+  extensionItemId String
+  extensionItem   UserExtensionItem @relation(fields: [extensionItemId], references: [id])
+  userId          String
+  user            User              @relation(fields: [userId], references: [id])
   x               Int
   y               Int
   width           Int

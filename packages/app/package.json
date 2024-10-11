@@ -24,7 +24,6 @@
     "@electron/fuses": "^1.8.0",
     "@note/lint": "workspace:*",
     "@note/server": "workspace:*",
-    "@note/ui": "workspace:*",
     "@types/electron-squirrel-startup": "^1",
     "@types/lodash": "^4.17.10",
     "@types/node": "20.14.11",

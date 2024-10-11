@@ -1,0 +1,4 @@
+{
+  "extends": "@note-extension/base/tsconfig.app.json",
+  "include": ["src"],
+}

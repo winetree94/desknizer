@@ -1,73 +1,35 @@
-import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
-import { uniqueId } from 'lodash';
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  Tray,
+  protocol,
+  net,
+} from 'electron';
+import { pathToFileURL } from 'url';
 import path from 'path';
 import { trpc } from './trpc';
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'app',
+    privileges: {
+      bypassCSP: true,
+      supportFetchAPI: true,
+      secure: true,
+      standard: true,
+      stream: true,
+      codeCache: true,
+      corsEnabled: true,
+      allowServiceWorkers: true,
+    },
+  },
+]);
 
 trpc.account.list.query().then((res) => {
   console.log(res);
 });
-
-export interface Extension {
-  id: string;
-  name: string;
-  description: string;
-  enable: boolean;
-  meta: Record<string, any>;
-}
-
-const EXTENSIONS = [
-  {
-    id: uniqueId('extension-'),
-    name: 'Note',
-    description: 'A simple note taking extension',
-    enable: true,
-    meta: {},
-  },
-  {
-    id: uniqueId('extension-'),
-    name: 'Todo',
-    description: 'A simple todo list extension',
-    enable: true,
-    meta: {},
-  },
-];
-
-export interface ExtensionData {
-  id: string;
-  extensionId: string;
-  data: Record<string, any>;
-}
-
-const EXTENSION_DATA = [
-  {
-    id: uniqueId('extension-data-'),
-    extensionId: EXTENSIONS[0].id,
-    data: {
-      content: 'Hello World 1',
-    },
-  },
-  {
-    id: uniqueId('extension-data-'),
-    extensionId: EXTENSIONS[0].id,
-    data: {
-      content: 'Hello World 2',
-    },
-  },
-];
-
-const WIDGETS = [
-  {
-    id: uniqueId('widget-'),
-    extensionId: EXTENSIONS[0].id,
-    dataId: EXTENSION_DATA[0].id,
-    rect: {
-      x: 0,
-      y: 0,
-      width: 200,
-      height: 200,
-    },
-  },
-];
 
 let tray: Tray | null = null;
 
@@ -97,6 +59,24 @@ app.whenReady().then(() => {
 
   tray.setToolTip('This is my application.');
   tray.setContextMenu(contextMenu);
+
+  protocol.handle('app', (req) => {
+    const { host, pathname } = new URL(req.url);
+    console.log('host: ', host);
+    console.log('pathname: ', pathname);
+
+    // NB, this checks for paths that escape the bundle, e.g.
+    // app://bundle/../../secret_file.txt
+
+    if (pathname === '/') {
+      const indexPath = path.resolve(__dirname, host, 'index.html');
+      console.log(indexPath);
+      return net.fetch(pathToFileURL(indexPath).toString());
+    }
+
+    const pathToServe = path.resolve(__dirname, host, pathname.slice(1));
+    return net.fetch(pathToFileURL(pathToServe).toString());
+  });
 });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -105,38 +85,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createMainWindow = () => {
-  // Create the browser window.
-
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    // frame: false,
-    // transparent: true,
-    // fullscreen: true,
-    // skipTaskbar: true,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      // nodeIntegration: true,
-    },
-  });
-
-  // mainWindow.setIgnoreMouseEvents(true);
-
-  // and load the index.html of the app.
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}`)
-    );
-  }
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-};
-
-const createNoteWindow = () => {
+const createExtensionSettings = (extensionId: string) => {
   // Create the browser window.
 
   const mainWindow = new BrowserWindow({
@@ -149,16 +98,11 @@ const createNoteWindow = () => {
     },
   });
 
-  // mainWindow.setIgnoreMouseEvents(true);
+  mainWindow.loadURL(`app://${extensionId}`);
 
-  // and load the index.html of the app.
-  if (NOTE_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(NOTE_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${NOTE_WINDOW_VITE_NAME}`)
-    );
-  }
+  mainWindow.webContents.openDevTools({
+    mode: 'detach',
+  });
 };
 
 const createSettingsWindow = () => {
@@ -190,15 +134,17 @@ const createSettingsWindow = () => {
   mainWindow.webContents.openDevTools();
 };
 
-ipcMain.handle('get-extensions', (event, args) => {
-  return EXTENSIONS;
-});
-
-ipcMain.on('open-extension-manager', (event, args) => {});
+ipcMain.on(
+  'open-extension-settings',
+  (event, args: { extensionId: string }) => {
+    console.log(args);
+    createExtensionSettings(args.extensionId);
+  }
+);
 
 ipcMain.on('create-widget', (event, args) => {
   if (args.type === 'note') {
-    createNoteWindow();
+    createExtensionSettings('1');
   }
 });
 
@@ -208,6 +154,7 @@ ipcMain.on('create-widget', (event, args) => {
 app.on('ready', () => {
   // createMainWindow();
   // createSettingsWindow();
+  createSettingsWindow();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

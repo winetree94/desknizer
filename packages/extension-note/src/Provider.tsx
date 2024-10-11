@@ -1,27 +1,11 @@
 import { MantineProvider } from '@mantine/core';
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from 'react-router-dom';
-import { IndexPage } from './pages/Index';
-import {Suspense, useState} from 'react';
+import { useState } from 'react';
 import { trpc } from './trpc';
 import { httpBatchLink } from '@trpc/client';
 import { QueryClient } from '@tanstack/react-query';
+import { App } from './App.tsx';
 
-const router = createBrowserRouter([
-  {
-    path: '/:tabValue',
-    element: <IndexPage />,
-  },
-  {
-    path: '/',
-    element: <Navigate to='extensions' />,
-  },
-]);
-
-export function SettingsProvider() {
+export function Provider() {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -42,9 +26,7 @@ export function SettingsProvider() {
   return (
     <trpc.Provider queryClient={queryClient} client={trpcClient}>
       <MantineProvider>
-        <Suspense fallback={null}>
-          <RouterProvider router={router} />
-        </Suspense>
+        <App />
       </MantineProvider>
     </trpc.Provider>
   );

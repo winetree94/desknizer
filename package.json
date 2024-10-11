@@ -2,7 +2,8 @@
   "name": "@note/base",
   "private": true,
   "scripts": {
-    "start": "yarn workspace @note/app start"
+    "start:app": "yarn workspace @note/app start",
+    "start:server": "yarn workspace @note/server dev"
   },
   "workspaces": [
     "packages/*"

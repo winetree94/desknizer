@@ -1,6 +1,11 @@
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron';
 import { uniqueId } from 'lodash';
 import path from 'path';
+import { trpc } from './trpc';
+
+trpc.account.list.query().then((res) => {
+  console.log(res);
+});
 
 export interface Extension {
   id: string;

@@ -8,6 +8,7 @@ import { IoClose, IoAdd } from 'react-icons/io5';
 import { IconMessageCircle, IconPhoto } from '@tabler/icons-react';
 import { Extensions } from './tabs/Extensions';
 import { Settings } from './tabs/Settings';
+import { Tester } from './tabs/Tester';
 
 export function IndexPage() {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -55,10 +56,16 @@ export function IndexPage() {
             Extensions
           </Tabs.Tab>
           <Tabs.Tab
-            value='messages'
+            value='settings'
             leftSection={<IconMessageCircle style={iconStyle} />}
           >
             Settings
+          </Tabs.Tab>
+          <Tabs.Tab
+            value='tester'
+            leftSection={<IconMessageCircle style={iconStyle} />}
+          >
+            Tester
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel
@@ -69,11 +76,18 @@ export function IndexPage() {
           <Extensions />
         </Tabs.Panel>
         <Tabs.Panel
-          value='messages'
+          value='settings'
           flex={1}
           style={{ flexGrow: 0, overflow: 'hidden' }}
         >
           <Settings />
+        </Tabs.Panel>
+        <Tabs.Panel
+          value='tester'
+          flex={1}
+          style={{ flexGrow: 0, overflow: 'hidden' }}
+        >
+          <Tester />
         </Tabs.Panel>
       </Tabs>
     </Flex>

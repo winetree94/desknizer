@@ -11,17 +11,45 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  userName String
-  posts    Post[]
+  id            Int             @id @default(autoincrement())
+  userName      String
+  extensions    Extension[]
+  ExtensionItem ExtensionItem[]
+  Widget        Widget[]
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Extension {
+  id             Int             @id @default(autoincrement())
+  userId         Int?
+  User           User?           @relation(fields: [userId], references: [id])
+  name           String
+  description    String
+  enabled        Boolean
+  meta           String
+  extensionItems ExtensionItem[]
+  Widget         Widget[]
+}
+
+model ExtensionItem {
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  extensionId Int?
+  Extension   Extension? @relation(fields: [extensionId], references: [id])
+  data        String
+  Widget      Widget[]
+}
+
+model Widget {
+  id              Int           @id @default(autoincrement())
+  extensionId     Int
+  extension       Extension     @relation(fields: [extensionId], references: [id])
+  extensionItemId Int
+  extensionItem   ExtensionItem @relation(fields: [extensionItemId], references: [id])
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id])
+  x               Int
+  y               Int
+  width           Int
+  height          Int
 }

@@ -18,20 +18,6 @@ export function IndexPage() {
   return (
     <Flex direction='column' flex='1 1 auto'>
       <Flex>
-        <Flex>
-          <ActionIcon
-            variant='subtle'
-            color='black'
-            aria-label='Settings'
-            onClick={() => {
-              window.electron.send('create-widget', {
-                type: 'note',
-              });
-            }}
-          >
-            <IoAdd style={{ width: '70%', height: '70%' }} />
-          </ActionIcon>
-        </Flex>
         <Flex className='drag-region' flex='1 1 auto'></Flex>
         <Flex>
           <ActionIcon variant='subtle' color='black' aria-label='Settings'>

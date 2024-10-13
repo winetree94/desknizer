@@ -56,8 +56,8 @@ export function App() {
           <Input mt='sm' placeholder='Search...' />
         </Flex>
         <Divider />
-        <ScrollArea flex={1} scrollbars='y' h='100%' pl='sm' pr='sm' pt='sm'>
-          <Flex direction='column' gap='sm' pb='sm'>
+        <ScrollArea flex={1} scrollbars='y' h='100%' pl='sm' pr='sm'>
+          <Flex direction='column' gap='sm' pb='sm' pt='sm'>
             <Card shadow='sm' padding='lg' radius='md' withBorder>
               <Text size='sm'>
                 With Fjord Tours you can explore more of the magical fjord

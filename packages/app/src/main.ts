@@ -10,10 +10,15 @@ import {
 import { pathToFileURL } from 'url';
 import path from 'path';
 import { trpc } from './trpc';
+import { ExtensionMeta } from './extension';
+
+const APP_SCHEME = 'app';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 protocol.registerSchemesAsPrivileged([
   {
-    scheme: 'app',
+    scheme: APP_SCHEME,
     privileges: {
       bypassCSP: true,
       supportFetchAPI: true,
@@ -60,13 +65,8 @@ app.whenReady().then(() => {
   tray.setToolTip('This is my application.');
   tray.setContextMenu(contextMenu);
 
-  protocol.handle('app', (req) => {
+  protocol.handle(APP_SCHEME, (req) => {
     const { host, pathname } = new URL(req.url);
-    console.log('host: ', host);
-    console.log('pathname: ', pathname);
-
-    // NB, this checks for paths that escape the bundle, e.g.
-    // app://bundle/../../secret_file.txt
 
     if (pathname === '/') {
       const indexPath = path.resolve(__dirname, host, 'index.html');
@@ -87,22 +87,42 @@ if (require('electron-squirrel-startup')) {
 
 const createExtensionSettings = (extensionId: string) => {
   // Create the browser window.
-
   const mainWindow = new BrowserWindow({
-    width: 200,
-    height: 200,
+    width: 400,
+    height: 400,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
     },
   });
+  if (isDevelopment) {
+    mainWindow.loadURL(
+      `http://localhost:${ExtensionMeta[extensionId].devPort}/index.html`
+    );
+  } else {
+    mainWindow.loadURL(`${APP_SCHEME}://${extensionId}/index.html`);
+  }
+};
 
-  mainWindow.loadURL(`app://${extensionId}`);
-
-  mainWindow.webContents.openDevTools({
-    mode: 'detach',
+const createExtensionWidget = (extensionId: string) => {
+  // Create the browser window.
+  const mainWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    frame: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+    },
   });
+  if (isDevelopment) {
+    mainWindow.loadURL(
+      `http://localhost:${ExtensionMeta[extensionId].devPort}/widget.html`
+    );
+  } else {
+    mainWindow.loadURL(`${APP_SCHEME}://${extensionId}/widget.html`);
+  }
 };
 
 const createSettingsWindow = () => {
@@ -129,9 +149,6 @@ const createSettingsWindow = () => {
       path.join(__dirname, `../renderer/${SETTINGS_WINDOW_VITE_NAME}`)
     );
   }
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 ipcMain.on(
@@ -143,9 +160,7 @@ ipcMain.on(
 );
 
 ipcMain.on('create-widget', (event, args) => {
-  if (args.type === 'note') {
-    createExtensionSettings('1');
-  }
+  createExtensionWidget(args.extensionId);
 });
 
 // This method will be called when Electron has finished

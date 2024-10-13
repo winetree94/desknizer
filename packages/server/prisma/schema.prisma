@@ -19,46 +19,45 @@ model Extension {
 }
 
 model User {
-  id            String              @id @default(uuid())
-  userName      String
-  extensions    UserExtension[]
-  ExtensionItem UserExtensionItem[]
-  Widget        UserWidget[]
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  password           String
+  UserExtensions     UserExtension[]
+  UserExtensionItems UserExtensionItem[]
+  UserWidgets        UserWidget[]
 }
 
 model UserExtension {
-  id             String              @id @default(uuid())
-  extensionId    String
-  extension      Extension           @relation(fields: [extensionId], references: [id])
-  userId         String
-  User           User?               @relation(fields: [userId], references: [id])
-  name           String
-  description    String
-  meta           String
-  extensionItems UserExtensionItem[]
-  Widget         UserWidget[]
+  id                 String              @id @default(uuid())
+  extensionId        String
+  Extension          Extension           @relation(fields: [extensionId], references: [id])
+  userId             String
+  User               User                @relation(fields: [userId], references: [id])
+  meta               String
+  UserExtensionItems UserExtensionItem[]
+  UserWidgets        UserWidget[]
 }
 
 model UserExtensionItem {
-  id          String        @id @default(uuid())
-  userId      String
-  user        User          @relation(fields: [userId], references: [id])
-  extensionId String
-  Extension   UserExtension @relation(fields: [extensionId], references: [id])
-  data        String
-  Widget      UserWidget[]
+  id            String        @id @default(uuid())
+  userId        String
+  User          User          @relation(fields: [userId], references: [id])
+  extensionId   String
+  UserExtension UserExtension @relation(fields: [extensionId], references: [id])
+  data          String
+  UserWidgets   UserWidget[]
 }
 
 model UserWidget {
-  id              String            @id @default(uuid())
-  extensionId     String
-  extension       UserExtension     @relation(fields: [extensionId], references: [id])
-  extensionItemId String
-  extensionItem   UserExtensionItem @relation(fields: [extensionItemId], references: [id])
-  userId          String
-  user            User              @relation(fields: [userId], references: [id])
-  x               Int
-  y               Int
-  width           Int
-  height          Int
+  id                 String            @id @default(uuid())
+  extensionId        String
+  UserExtension      UserExtension     @relation(fields: [extensionId], references: [id])
+  extensionItemId    String
+  UserExtensionItems UserExtensionItem @relation(fields: [extensionItemId], references: [id])
+  userId             String
+  User               User              @relation(fields: [userId], references: [id])
+  x                  Int
+  y                  Int
+  width              Int
+  height             Int
 }

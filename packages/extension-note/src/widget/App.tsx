@@ -3,7 +3,7 @@
 import '@mantine/tiptap/styles.css';
 import { ActionIcon, Flex, Text } from '@mantine/core';
 import { IoClose, IoAdd } from 'react-icons/io5';
-import Meta from '../package.json';
+import Meta from '../../package.json';
 
 export function App() {
   return (

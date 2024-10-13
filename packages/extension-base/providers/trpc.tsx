@@ -1,11 +1,12 @@
-import { MantineProvider } from '@mantine/core';
-import { useState } from 'react';
-import { trpc } from './trpc';
+import type { AppRouter } from '@note/server/src';
+import { createTRPCReact } from '@trpc/react-query';
+import { PropsWithChildren, useState } from 'react';
 import { httpBatchLink } from '@trpc/client';
 import { QueryClient } from '@tanstack/react-query';
-import { App } from './App.tsx';
 
-export function Provider() {
+export const trpc = createTRPCReact<AppRouter>();
+
+export function ExtensionTRPCProvider(props: PropsWithChildren) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -25,9 +26,7 @@ export function Provider() {
 
   return (
     <trpc.Provider queryClient={queryClient} client={trpcClient}>
-      <MantineProvider>
-        <App />
-      </MantineProvider>
+      {props.children}
     </trpc.Provider>
   );
 }

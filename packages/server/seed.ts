@@ -1,12 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import NoteMeta from '@note-extension/note/package.json';
 const prisma = new PrismaClient();
+
 async function main() {
   await prisma.extension.create({
     data: {
-      id: '3dfba99e-5159-42a2-9926-8c962e0d3f6e',
-      name: 'note',
+      id: NoteMeta.extensionConfigs.uuid,
+      name: NoteMeta.extensionConfigs.name,
       enable: true,
-      description: 'can memo',
+      description: NoteMeta.extensionConfigs.description,
     },
   });
   // const alice = await prisma.user.upsert({

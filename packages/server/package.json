@@ -7,22 +7,25 @@
     "build"
   ],
   "scripts": {
-    "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "seed": "ts-node seed.ts",
+    "prisma:seed": "ts-node seed.ts",
     "build": "tsc"
   },
   "dependencies": {
+    "@note-extension/note": "workspace:*",
     "@prisma/client": "^5.20.0",
     "@trpc/client": "^11.0.0-rc.569",
     "@trpc/server": "^11.0.0-rc.569",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@note/lint": "workspace:*",
+    "@types/bcrypt": "^5",
     "@types/cors": "^2.8.17",
     "@types/node": "20.14.11",
     "nodemon": "^3.1.7",

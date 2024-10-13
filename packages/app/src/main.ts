@@ -1,8 +1,11 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { ExtensionManager } from './extension';
+import 'reflect-metadata';
+import { app } from 'electron';
 import { SettingsWindowManager } from './settings';
 import { ProtocolManager } from './protocol';
 import { TrayManager } from './tray';
+import { DatabaseManager } from './database/database';
+import { ExtensionManager } from './extension';
+import { WidgetManager } from './widget';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -10,20 +13,14 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-app
-  .whenReady()
-  .then(() => Promise.all([TrayManager.load(), ProtocolManager.load()]));
-
-ipcMain.on(
-  'open-extension-settings',
-  (event, args: { extensionId: string }) => {
-    console.log(args);
-    ExtensionManager.openExtensionSettings(args.extensionId);
-  }
-);
-
-ipcMain.on('create-widget', (event, args) => {
-  ExtensionManager.openExtensionWidget(args.extensionId);
+app.whenReady().then(async () => {
+  await Promise.all([
+    TrayManager.load(),
+    ProtocolManager.load(),
+    ExtensionManager.load(),
+    WidgetManager.load(),
+    DatabaseManager.load(),
+  ]);
 });
 
 // This method will be called when Electron has finished
@@ -38,20 +35,20 @@ app.on('ready', () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    // app.quit();
-  }
-});
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') {
+//     // app.quit();
+//   }
+// });
 
-app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    // createMainWindow();
-    // createSettingsWindow();
-  }
-});
+// app.on('activate', () => {
+//   // On OS X it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (BrowserWindow.getAllWindows().length === 0) {
+//     // createMainWindow();
+//     // createSettingsWindow();
+//   }
+// });
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

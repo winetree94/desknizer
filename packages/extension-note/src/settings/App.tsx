@@ -1,5 +1,6 @@
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
+import { useEffect } from 'react';
 import '@mantine/tiptap/styles.css';
 import {
   Divider,
@@ -12,14 +13,29 @@ import {
 } from '@mantine/core';
 import { IoClose, IoAdd } from 'react-icons/io5';
 import Meta from '../../package.json';
-import { trpc } from '@note-extension/base/providers/trpc';
 
 export function App() {
-  const { data } = trpc.extension.one.useQuery({
-    id: Meta.extensionConfigs.uuid,
-  });
+  useEffect(() => {
+    window.electron.on('user-extension-updated', (data) => {
+      console.log(data);
+    });
+  }, []);
 
-  console.log(data);
+  useEffect(() => {
+    const getter = async () => {
+      const extensionInfo = await window.electron.invoke<any, any>(
+        'get-user-extension-info',
+        Meta.extensionConfigs.uuid
+      );
+      const extensionItems = await window.electron.invoke<any, any>(
+        'get-user-extension-items',
+        Meta.extensionConfigs.uuid
+      );
+      console.log(extensionInfo);
+      console.log(extensionItems);
+    };
+    getter();
+  }, []);
 
   return (
     <Flex direction='column' flex='1 1 auto'>
@@ -29,10 +45,21 @@ export function App() {
             variant='subtle'
             color='black'
             aria-label='Settings'
-            onClick={() => {
-              window.electron.send('create-widget', {
-                extensionId: Meta.extensionConfigs.uuid,
-              });
+            onClick={async () => {
+              const entity = await window.electron.invoke(
+                'create-user-extension-item',
+                {
+                  extensionId: Meta.extensionConfigs.uuid,
+                  data: {
+                    title: 'New Note',
+                    content: 'This is a new note',
+                  },
+                }
+              );
+              console.log(entity);
+              // window.electron.send('create-widget', {
+              //   extensionId: Meta.extensionConfigs.uuid,
+              // });
             }}
           >
             <IoAdd style={{ width: '70%', height: '70%' }} />

@@ -11,11 +11,11 @@ datasource db {
 }
 
 model Extension {
-  id            String          @id @default(uuid())
-  name          String
-  description   String
-  enable        Boolean
-  UserExtension UserExtension[]
+  id          String          @id @default(uuid())
+  name        String
+  description String
+  enable      Boolean
+  Entities    UserExtension[]
 }
 
 model User {
@@ -27,7 +27,7 @@ model User {
   UserWidgets        UserWidget[]
 }
 
-model UserExtension {
+model Entities {
   id                 String              @id @default(uuid())
   extensionId        String
   Extension          Extension           @relation(fields: [extensionId], references: [id])
@@ -39,19 +39,19 @@ model UserExtension {
 }
 
 model UserExtensionItem {
-  id            String        @id @default(uuid())
-  userId        String
-  User          User          @relation(fields: [userId], references: [id])
-  extensionId   String
-  UserExtension UserExtension @relation(fields: [extensionId], references: [id])
-  data          String
-  UserWidgets   UserWidget[]
+  id          String        @id @default(uuid())
+  userId      String
+  User        User          @relation(fields: [userId], references: [id])
+  extensionId String
+  Entities    UserExtension @relation(fields: [extensionId], references: [id])
+  data        String
+  UserWidgets UserWidget[]
 }
 
 model UserWidget {
   id                 String            @id @default(uuid())
   extensionId        String
-  UserExtension      UserExtension     @relation(fields: [extensionId], references: [id])
+  Entities           UserExtension     @relation(fields: [extensionId], references: [id])
   extensionItemId    String
   UserExtensionItems UserExtensionItem @relation(fields: [extensionItemId], references: [id])
   userId             String

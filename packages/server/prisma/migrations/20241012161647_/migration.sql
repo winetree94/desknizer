@@ -14,7 +14,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "UserExtension" (
+CREATE TABLE "Entities" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "extensionId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE "UserExtensionItem" (
     "extensionId" TEXT NOT NULL,
     "data" TEXT NOT NULL,
     CONSTRAINT "UserExtensionItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "UserExtensionItem_extensionId_fkey" FOREIGN KEY ("extensionId") REFERENCES "UserExtension" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "UserExtensionItem_extensionId_fkey" FOREIGN KEY ("extensionId") REFERENCES "Entities" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -43,7 +43,7 @@ CREATE TABLE "UserWidget" (
     "y" INTEGER NOT NULL,
     "width" INTEGER NOT NULL,
     "height" INTEGER NOT NULL,
-    CONSTRAINT "UserWidget_extensionId_fkey" FOREIGN KEY ("extensionId") REFERENCES "UserExtension" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "UserWidget_extensionId_fkey" FOREIGN KEY ("extensionId") REFERENCES "Entities" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "UserWidget_extensionItemId_fkey" FOREIGN KEY ("extensionItemId") REFERENCES "UserExtensionItem" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "UserWidget_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

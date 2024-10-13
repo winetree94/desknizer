@@ -1,16 +1,25 @@
 import NoteMeta from '@note-extension/note/package.json';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
+import { DatabaseManager } from './database/database';
+import {
+  UserExtension,
+  UserExtensionItem,
+} from './database/entities/UserExtension';
 
 export const ExtensionMeta: {
   [key: string]: {
+    name: string;
+    description: string;
     uuid: string;
     devPort: number;
   };
 } = {
   [NoteMeta.extensionConfigs.uuid]: {
+    name: NoteMeta.extensionConfigs.name,
+    description: NoteMeta.extensionConfigs.description,
     uuid: NoteMeta.extensionConfigs.uuid,
     devPort: NoteMeta.extensionConfigs.devPort,
   },
@@ -37,6 +46,7 @@ const openExtensionSettings = (extensionId: string) => {
       nodeIntegration: true,
     },
   });
+
   if (isDevelopment) {
     window.loadURL(
       `http://localhost:${ExtensionMeta[extensionId].devPort}/index.html`
@@ -52,27 +62,86 @@ const openExtensionSettings = (extensionId: string) => {
   openedExtensionSettings[extensionId] = openedWindow;
 };
 
-const openExtensionWidget = (extensionId: string) => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 400,
-    height: 400,
-    frame: false,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
+/**
+ * @description
+ * 사용 가능한 익스텐션 목록을 반환
+ */
+ipcMain.handle('get-extensions', async () => {
+  return ExtensionMeta;
+});
+
+/**
+ * @description
+ * 사용자의 익스텐션 설정 정보를 반환
+ */
+ipcMain.handle('get-user-extension-info', async (event, uuid: string) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtension, {
+    where: {
+      id: uuid,
     },
   });
-  if (isDevelopment) {
-    mainWindow.loadURL(
-      `http://localhost:${ExtensionMeta[extensionId].devPort}/widget.html`
-    );
-  } else {
-    mainWindow.loadURL(`${APP_SCHEME}://${extensionId}/widget.html`);
+  if (found) {
+    return found;
   }
-};
+  const entity = new UserExtension();
+  entity.id = uuid;
+  entity.meta = {};
+  await manager.insert(UserExtension, entity);
+  // await manager.save(entity);
+  console.log('get-user-extension-info: ', entity);
+  return entity;
+});
+
+/**
+ * @description
+ * 사용자의 익스텐션 데이터 목록을 반환
+ */
+ipcMain.handle('get-user-extension-items', async (event, uuid: string) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtension, {
+    where: {
+      id: uuid,
+    },
+    relations: ['items'],
+  });
+  if (found) {
+    return found.items;
+  }
+  return [];
+});
+
+/**
+ * @description
+ * 사용자의 익스텐션 아이템 데이터를 생성
+ */
+ipcMain.handle('create-user-extension-item', async (event, args: any) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtension, {
+    where: {
+      id: args.extensionId,
+    },
+    relations: ['items'],
+  });
+  if (found) {
+    const item = new UserExtensionItem();
+    item.data = args.data;
+    item.userExtension = found;
+    await manager.save(item);
+    return item;
+  }
+  return null;
+});
+
+ipcMain.on(
+  'open-extension-settings',
+  (event, args: { extensionId: string }) => {
+    console.log(args);
+    ExtensionManager.openExtensionSettings(args.extensionId);
+  }
+);
 
 export const ExtensionManager = {
+  load: async () => {},
   openExtensionSettings: openExtensionSettings,
-  openExtensionWidget: openExtensionWidget,
 };

@@ -7,6 +7,7 @@ import {
   UserWidget,
 } from './entities/UserExtension';
 import { UserExtensionSubscriber } from './subscribers/UserExtensionSubscriber';
+import { UserExtensionItemSubscriber } from './subscribers/UserExtensionItemSubscriber';
 
 const databasePath = path.join(app.getPath('userData'), 'note.db');
 
@@ -16,12 +17,18 @@ const db = new DataSource({
   synchronize: true,
   logging: true,
   entities: [UserExtension, UserExtensionItem, UserWidget],
-  subscribers: [UserExtensionSubscriber],
+  subscribers: [UserExtensionSubscriber, UserExtensionItemSubscriber],
 });
+
+let initialized = false;
 
 export const DatabaseManager = {
   load: async () => {
+    if (initialized) {
+      return;
+    }
     await db.initialize();
+    initialized = true;
   },
   seed: async () => {},
   get: () => db,

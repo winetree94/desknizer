@@ -13,8 +13,13 @@ export function Extensions() {
 
   useEffect(() => {
     const runner = async () => {
-      const extensions = await window.electron.invoke('get-extensions');
-      console.log(extensions);
+      const extensions = (await window.electron.invoke('get-extensions')) as {
+        [key: string]: {
+          name: string;
+          description: string;
+          uuid: string;
+        };
+      };
       setData(Object.values(extensions));
     };
     runner();

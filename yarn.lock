@@ -1560,6 +1560,7 @@ __metadata:
     "@note-extension/note": "workspace:*"
     "@note/lint": "workspace:*"
     "@note/server": "workspace:*"
+    "@note/types": "workspace:*"
     "@note/ui": "workspace:*"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@swc/core": "npm:^1.7.35"
@@ -1643,6 +1644,12 @@ __metadata:
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.6.3"
     zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
+
+"@note/types@workspace:*, @note/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@note/types@workspace:packages/types"
   languageName: unknown
   linkType: soft
 

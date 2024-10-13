@@ -1,6 +1,6 @@
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '@mantine/tiptap/styles.css';
 import {
   Divider,
@@ -14,7 +14,16 @@ import {
 import { IoClose, IoAdd } from 'react-icons/io5';
 import Meta from '../../package.json';
 
+interface NoteItem {
+  id: string;
+  data: {
+    content: string;
+  };
+}
+
 export function App() {
+  const [contents, setContents] = useState<NoteItem[]>([]);
+
   useEffect(() => {
     window.electron.on('user-extension-updated', (data) => {
       console.log(data);
@@ -23,17 +32,34 @@ export function App() {
 
   useEffect(() => {
     const getter = async () => {
-      const extensionInfo = await window.electron.invoke<any, any>(
-        'get-user-extension-info',
-        Meta.extensionConfigs.uuid
-      );
-      const extensionItems = await window.electron.invoke<any, any>(
-        'get-user-extension-items',
-        Meta.extensionConfigs.uuid
-      );
-      console.log(extensionInfo);
-      console.log(extensionItems);
+      const extensionInfo = await window.electron.invoke<
+        {
+          extensionId: string;
+        },
+        {
+          id: string;
+          meta: {};
+        }
+      >('get-user-extension-info', {
+        extensionId: Meta.extensionConfigs.uuid,
+      });
+
+      const extensionItems = await window.electron.invoke<
+        {
+          extensionId: string;
+        },
+        NoteItem[]
+      >('get-user-extension-items', {
+        extensionId: Meta.extensionConfigs.uuid,
+      });
+
+      setContents(() => extensionItems);
     };
+
+    window.electron.on('user-extension-item-inserted', (event, data) => {
+      console.log('inserted', event, data);
+    });
+
     getter();
   }, []);
 
@@ -46,16 +72,26 @@ export function App() {
             color='black'
             aria-label='Settings'
             onClick={async () => {
-              const entity = await window.electron.invoke(
-                'create-user-extension-item',
+              const entity = await window.electron.invoke<
                 {
-                  extensionId: Meta.extensionConfigs.uuid,
+                  extensionId: string;
                   data: {
-                    title: 'New Note',
-                    content: 'This is a new note',
-                  },
+                    content: string;
+                  };
+                },
+                {
+                  id: string;
+                  meta: {};
                 }
-              );
+              >('create-user-extension-item', {
+                extensionId: Meta.extensionConfigs.uuid,
+                data: {
+                  content: 'This is a new note',
+                },
+              });
+              await window.electron.invoke('create-widget', {
+                dataId: entity.id,
+              });
               console.log(entity);
               // window.electron.send('create-widget', {
               //   extensionId: Meta.extensionConfigs.uuid,
@@ -85,34 +121,17 @@ export function App() {
         <Divider />
         <ScrollArea flex={1} scrollbars='y' h='100%' pl='sm' pr='sm'>
           <Flex direction='column' gap='sm' pb='sm' pt='sm'>
-            <Card shadow='sm' padding='lg' radius='md' withBorder>
-              <Text size='sm'>
-                With Fjord Tours you can explore more of the magical fjord
-                landscapes with tours and activities on and around the fjords of
-                Norway
-              </Text>
-            </Card>
-            <Card shadow='sm' padding='lg' radius='md' withBorder>
-              <Text size='sm'>
-                With Fjord Tours you can explore more of the magical fjord
-                landscapes with tours and activities on and around the fjords of
-                Norway
-              </Text>
-            </Card>
-            <Card shadow='sm' padding='lg' radius='md' withBorder>
-              <Text size='sm'>
-                With Fjord Tours you can explore more of the magical fjord
-                landscapes with tours and activities on and around the fjords of
-                Norway
-              </Text>
-            </Card>
-            <Card shadow='sm' padding='lg' radius='md' withBorder>
-              <Text size='sm'>
-                With Fjord Tours you can explore more of the magical fjord
-                landscapes with tours and activities on and around the fjords of
-                Norway
-              </Text>
-            </Card>
+            {contents.map((content) => (
+              <Card
+                key={content.id}
+                shadow='sm'
+                padding='lg'
+                radius='md'
+                withBorder
+              >
+                <Text size='sm'>{content.data.content}</Text>
+              </Card>
+            ))}
           </Flex>
         </ScrollArea>
       </Flex>

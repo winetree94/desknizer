@@ -59,7 +59,7 @@ const openExtensionSettings = (extensionId: string) => {
     delete openedExtensionSettings[extensionId];
   });
 
-  openedExtensionSettings[extensionId] = openedWindow;
+  openedExtensionSettings[extensionId] = window;
 };
 
 /**
@@ -74,74 +74,108 @@ ipcMain.handle('get-extensions', async () => {
  * @description
  * 사용자의 익스텐션 설정 정보를 반환
  */
-ipcMain.handle('get-user-extension-info', async (event, uuid: string) => {
-  const manager = DatabaseManager.get().manager;
-  const found = await manager.findOne(UserExtension, {
-    where: {
-      id: uuid,
-    },
-  });
-  if (found) {
-    return found;
+ipcMain.handle(
+  'get-user-extension-info',
+  async (event, opts: { extensionId: string }) => {
+    const manager = DatabaseManager.get().manager;
+    const entity = await manager.findOne(UserExtension, {
+      where: {
+        id: opts.extensionId,
+      },
+    });
+    return entity;
   }
-  const entity = new UserExtension();
-  entity.id = uuid;
-  entity.meta = {};
-  await manager.insert(UserExtension, entity);
-  // await manager.save(entity);
-  console.log('get-user-extension-info: ', entity);
-  return entity;
-});
+);
 
 /**
  * @description
  * 사용자의 익스텐션 데이터 목록을 반환
  */
-ipcMain.handle('get-user-extension-items', async (event, uuid: string) => {
-  const manager = DatabaseManager.get().manager;
-  const found = await manager.findOne(UserExtension, {
-    where: {
-      id: uuid,
-    },
-    relations: ['items'],
-  });
-  if (found) {
-    return found.items;
+ipcMain.handle(
+  'get-user-extension-items',
+  async (
+    event,
+    opts: {
+      extensionId: string;
+    }
+  ) => {
+    const manager = DatabaseManager.get().manager;
+    const found = await manager.findOne(UserExtension, {
+      where: {
+        id: opts.extensionId,
+      },
+      relations: ['items'],
+    });
+    if (found) {
+      return found.items;
+    }
+    return [];
   }
-  return [];
-});
+);
 
 /**
  * @description
  * 사용자의 익스텐션 아이템 데이터를 생성
  */
-ipcMain.handle('create-user-extension-item', async (event, args: any) => {
-  const manager = DatabaseManager.get().manager;
-  const found = await manager.findOne(UserExtension, {
-    where: {
-      id: args.extensionId,
-    },
-    relations: ['items'],
-  });
-  if (found) {
-    const item = new UserExtensionItem();
-    item.data = args.data;
-    item.userExtension = found;
-    await manager.save(item);
-    return item;
+ipcMain.handle(
+  'create-user-extension-item',
+  async (
+    event,
+    opts: {
+      extensionId: string;
+      data: object;
+    }
+  ) => {
+    const manager = DatabaseManager.get().manager;
+    const found = await manager.findOne(UserExtension, {
+      where: {
+        id: opts.extensionId,
+      },
+      relations: ['items'],
+    });
+    if (found) {
+      const item = new UserExtensionItem();
+      item.data = opts.data;
+      item.userExtension = found;
+      await manager.save(item);
+      return item;
+    }
+    return null;
   }
-  return null;
-});
+);
 
 ipcMain.on(
   'open-extension-settings',
-  (event, args: { extensionId: string }) => {
-    console.log(args);
-    ExtensionManager.openExtensionSettings(args.extensionId);
+  (event, opts: { extensionId: string }) => {
+    ExtensionManager.openExtensionSettings(opts.extensionId);
   }
 );
 
 export const ExtensionManager = {
-  load: async () => {},
+  load: async () => {
+    await DatabaseManager.load();
+    const manager = DatabaseManager.get().manager;
+    const extensions = Object.values(ExtensionMeta);
+    await manager.transaction(async (manager) => {
+      for (const extension of extensions) {
+        const found = await manager.findOne(UserExtension, {
+          where: {
+            id: extension.uuid,
+          },
+        });
+        if (!found) {
+          const entity = new UserExtension();
+          entity.id = extension.uuid;
+          entity.meta = {};
+          await manager.save(entity);
+        }
+      }
+    });
+  },
+  openedExtensionSettings: openedExtensionSettings,
   openExtensionSettings: openExtensionSettings,
+  getOpenedExtensionWindow: (extensionId: string) => {
+    console.log(openedExtensionSettings);
+    return openedExtensionSettings[extensionId];
+  },
 };

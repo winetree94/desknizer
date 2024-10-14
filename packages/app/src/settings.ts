@@ -47,6 +47,7 @@ const close = () => {
 const getWindow = () => settingsWindow;
 
 export const SettingsWindowManager = {
+  load: async () => {},
   getWindow: getWindow,
   open: open,
   close: close,

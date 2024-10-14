@@ -19,6 +19,19 @@ const load = async () => {
       },
     },
     {
+      type: 'submenu',
+      label: 'Extensions',
+      submenu: [
+        {
+          label: 'Note 1',
+          type: 'normal',
+          click: () => {
+            console.log('Extension 1');
+          },
+        },
+      ],
+    },
+    {
       label: 'Quit',
       type: 'normal',
       click: () => {

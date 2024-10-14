@@ -15,11 +15,11 @@ if (require('electron-squirrel-startup')) {
 
 app.whenReady().then(async () => {
   await Promise.all([
+    DatabaseManager.load().then(() => ExtensionManager.load()),
     TrayManager.load(),
+    SettingsWindowManager.load(),
     ProtocolManager.load(),
-    ExtensionManager.load(),
     WidgetManager.load(),
-    DatabaseManager.load(),
   ]);
 });
 
@@ -29,7 +29,7 @@ app.whenReady().then(async () => {
 app.on('ready', () => {
   // createMainWindow();
   // createSettingsWindow();
-  SettingsWindowManager.open();
+  // SettingsWindowManager.open();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

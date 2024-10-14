@@ -153,7 +153,6 @@ ipcMain.on(
 
 export const ExtensionManager = {
   load: async () => {
-    await DatabaseManager.load();
     const manager = DatabaseManager.get().manager;
     const extensions = Object.values(ExtensionMeta);
     await manager.transaction(async (manager) => {

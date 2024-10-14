@@ -4,7 +4,8 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('electron', {
+const apis: typeof window.electron = {
+  ipcRenderer: ipcRenderer,
   send: (channel: string, data: any) => {
     ipcRenderer.send(channel, data);
   },
@@ -20,11 +21,6 @@ contextBridge.exposeInMainWorld('electron', {
   ) => {
     ipcRenderer.removeListener(channel, listener);
   },
-  // Expose any APIs you want to be available in the renderer process
-  // (e.g. to enable the use of Node.js modules in the renderer)
-  // api: require('./api'),
-  // ipcRenderer: require('electron').ipcRenderer,
-  // remote: require('electron').remote,
-  // shell: require('electron').shell,
-  // etc.
-});
+};
+
+contextBridge.exposeInMainWorld('electron', apis);

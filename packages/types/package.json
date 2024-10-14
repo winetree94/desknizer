@@ -1,4 +1,8 @@
 {
   "name": "@note/types",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "electron": "32.1.2",
+    "typescript": "^5.5.3"
+  }
 }

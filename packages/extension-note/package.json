@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@note-extension/base": "workspace:*"
+    "@note/lint": "workspace:*",
+    "@note/types": "workspace:*",
+    "@note/ui": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.5.3",

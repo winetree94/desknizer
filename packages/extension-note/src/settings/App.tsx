@@ -32,17 +32,17 @@ export function App() {
 
   useEffect(() => {
     const getter = async () => {
-      const extensionInfo = await window.electron.invoke<
-        {
-          extensionId: string;
-        },
-        {
-          id: string;
-          meta: {};
-        }
-      >('get-user-extension-info', {
-        extensionId: Meta.extensionConfigs.uuid,
-      });
+      // const extensionInfo = await window.electron.invoke<
+      //   {
+      //     extensionId: string;
+      //   },
+      //   {
+      //     id: string;
+      //     meta: {};
+      //   }
+      // >('get-user-extension-info', {
+      //   extensionId: Meta.extensionConfigs.uuid,
+      // });
 
       const extensionItems = await window.electron.invoke<
         {
@@ -81,7 +81,7 @@ export function App() {
                 },
                 {
                   id: string;
-                  meta: {};
+                  meta: object;
                 }
               >('create-user-extension-item', {
                 extensionId: Meta.extensionConfigs.uuid,

@@ -32,12 +32,13 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
   afterUpdate(
     event: UpdateEvent<UserExtensionItem<T, I>>
   ): Promise<void> | void {
-    console.log('UserExtensionItemSubscriber.afterUpdate', event.entity);
-    ipcMain.emit('user-extension-item-updated', event.entity);
-
-    // ExtensionManager.getOpenedExtensionWindow(
-    //   event.entity.userExtension.id
-    // )?.webContents.send('user-extension-item-updated', event.entity);
+    const targetWindow = ExtensionManager.getOpenedExtensionWindow(
+      event.entity?.userExtension.id
+    );
+    targetWindow?.webContents.send(
+      'user-extension-item-inserted',
+      event.entity
+    );
   }
 
   afterRemove(

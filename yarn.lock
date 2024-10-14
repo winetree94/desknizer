@@ -1507,37 +1507,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@note-extension/base@workspace:*, @note-extension/base@workspace:packages/extension-base":
-  version: 0.0.0-use.local
-  resolution: "@note-extension/base@workspace:packages/extension-base"
-  dependencies:
-    "@note/lint": "workspace:*"
-    "@note/server": "workspace:*"
-    "@note/ui": "workspace:*"
-    "@tanstack/react-query": "npm:^5.59.9"
-    "@trpc/client": "npm:^11.0.0-rc.569"
-    "@trpc/react-query": "npm:^11.0.0-rc.569"
-    "@trpc/server": "npm:^11.0.0-rc.569"
-    "@types/lodash": "npm:^4.17.10"
-    "@types/react": "npm:^18.3.10"
-    "@types/react-dom": "npm:^18.3.0"
-    "@vitejs/plugin-react": "npm:^4.3.2"
-    framer-motion: "npm:^11.11.4"
-    lodash: "npm:^4.17.21"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-icons: "npm:^5.3.0"
-    react-router-dom: "npm:^6.26.2"
-    typescript: "npm:^5.5.3"
-    vite: "npm:^5.4.8"
-  languageName: unknown
-  linkType: soft
-
 "@note-extension/note@workspace:*, @note-extension/note@workspace:packages/extension-note":
   version: 0.0.0-use.local
   resolution: "@note-extension/note@workspace:packages/extension-note"
   dependencies:
-    "@note-extension/base": "workspace:*"
+    "@note/lint": "workspace:*"
+    "@note/types": "workspace:*"
+    "@note/ui": "workspace:*"
     typescript: "npm:^5.5.3"
     vite: "npm:^5.4.8"
   languageName: unknown
@@ -1564,37 +1540,17 @@ __metadata:
     "@note/ui": "workspace:*"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@swc/core": "npm:^1.7.35"
-    "@tanstack/react-query": "npm:^5.59.9"
-    "@trpc/client": "npm:^11.0.0-rc.569"
-    "@trpc/react-query": "npm:^11.0.0-rc.569"
-    "@trpc/server": "npm:^11.0.0-rc.569"
-    "@types/better-sqlite3": "npm:^7.6.11"
     "@types/electron-squirrel-startup": "npm:^1"
-    "@types/lodash": "npm:^4.17.10"
     "@types/node": "npm:20.14.11"
-    "@types/react": "npm:^18.3.10"
-    "@types/react-dom": "npm:^18.3.0"
     "@vitejs/plugin-react": "npm:^4.3.2"
-    better-sqlite3: "npm:^11.3.0"
-    builtin-modules: "npm:^4.0.0"
-    dayjs: "npm:^1.11.13"
     electron: "npm:32.1.2"
     electron-squirrel-startup: "npm:^1.0.1"
     electron-vite: "npm:^2.3.0"
-    framer-motion: "npm:^11.11.4"
-    lodash: "npm:^4.17.21"
-    postcss: "npm:^8.4.47"
-    postcss-preset-mantine: "npm:^1.17.0"
-    postcss-simple-vars: "npm:^7.0.1"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-icons: "npm:^5.3.0"
-    react-router-dom: "npm:^6.26.2"
     reflect-metadata: "npm:^0.2.2"
     sqlite3: "npm:^5.1.7"
     ts-node: "npm:^10.0.0"
     typeorm: "npm:^0.3.20"
-    typescript: "npm:~4.5.4"
+    typescript: "npm:^5.5.3"
     vite: "npm:^5.0.12"
   languageName: unknown
   linkType: soft
@@ -1642,7 +1598,7 @@ __metadata:
     nodemon: "npm:^3.1.7"
     prisma: "npm:^5.20.0"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.6.3"
+    typescript: "npm:^5.5.3"
     zod: "npm:^3.23.8"
   languageName: unknown
   linkType: soft
@@ -1650,6 +1606,9 @@ __metadata:
 "@note/types@workspace:*, @note/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@note/types@workspace:packages/types"
+  dependencies:
+    electron: "npm:32.1.2"
+    typescript: "npm:^5.5.3"
   languageName: unknown
   linkType: soft
 
@@ -1664,6 +1623,7 @@ __metadata:
     "@mantine/hooks": "npm:^7.13.2"
     "@mantine/tiptap": "npm:^7.13.2"
     "@tabler/icons-react": "npm:^3.19.0"
+    "@tanstack/react-query": "npm:^5.59.9"
     "@tiptap/extension-highlight": "npm:^2.8.0"
     "@tiptap/extension-link": "npm:^2.8.0"
     "@tiptap/extension-subscript": "npm:^2.8.0"
@@ -1674,6 +1634,21 @@ __metadata:
     "@tiptap/pm": "npm:^2.8.0"
     "@tiptap/react": "npm:^2.8.0"
     "@tiptap/starter-kit": "npm:^2.8.0"
+    "@types/lodash": "npm:^4.17.10"
+    "@types/react": "npm:^18.3.10"
+    "@types/react-dom": "npm:^18.3.0"
+    "@vitejs/plugin-react": "npm:^4.3.2"
+    framer-motion: "npm:^11.11.4"
+    lodash: "npm:^4.17.21"
+    postcss: "npm:^8.4.47"
+    postcss-preset-mantine: "npm:^1.17.0"
+    postcss-simple-vars: "npm:^7.0.1"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-icons: "npm:^5.3.0"
+    react-router-dom: "npm:^6.26.2"
+    typescript: "npm:^5.5.3"
+    vite: "npm:^5.4.8"
   languageName: unknown
   linkType: soft
 
@@ -3052,19 +3027,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/react-query@npm:^11.0.0-rc.569":
-  version: 11.0.0-rc.569
-  resolution: "@trpc/react-query@npm:11.0.0-rc.569"
-  peerDependencies:
-    "@tanstack/react-query": ^5.54.1
-    "@trpc/client": 11.0.0-rc.569+8049266de
-    "@trpc/server": 11.0.0-rc.569+8049266de
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
-  checksum: 10c0/f9a12f7e876f8c939aaab8d94c8d6edd8c44626c5c1bacaae88fe396a53dd8bac46b3e041c81b3a5abb9b14327d0caf11ec341e170ef1e8baa29b4a6269f1599
-  languageName: node
-  linkType: hard
-
 "@trpc/server@npm:^11.0.0-rc.569":
   version: 11.0.0-rc.569
   resolution: "@trpc/server@npm:11.0.0-rc.569"
@@ -3173,15 +3135,6 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 10c0/dd7f05e183b9b1fc08ec499069febf197ab8e9c720766b5bbb5628395082e248f9a444c60882fe7788361fcadc302e21e055ab9c26a300f100e08791c353e6aa
-  languageName: node
-  linkType: hard
-
-"@types/better-sqlite3@npm:^7.6.11":
-  version: 7.6.11
-  resolution: "@types/better-sqlite3@npm:7.6.11"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/6a7b8e5765f872404242ff9626edf4b4dd7974047144ba7254a59f4f1c196d05f8001323d0b526e8bbb3842bf541e341d74ca0164e50bd38fceaf3ef5d2a673d
   languageName: node
   linkType: hard
 
@@ -4208,17 +4161,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-sqlite3@npm:^11.3.0":
-  version: 11.3.0
-  resolution: "better-sqlite3@npm:11.3.0"
-  dependencies:
-    bindings: "npm:^1.5.0"
-    node-gyp: "npm:latest"
-    prebuild-install: "npm:^7.1.1"
-  checksum: 10c0/9adc99683300699581da5d7288e4a261b7d4381fd99c762fc6a0e9b1e1e226009c1333b46b10c1c453c356b20cb8be037a4616b1e717b3d1a00bd8493bec506e
-  languageName: node
-  linkType: hard
-
 "bin-links@npm:^4.0.4":
   version: 4.0.4
   resolution: "bin-links@npm:4.0.4"
@@ -4365,13 +4307,6 @@ __metadata:
     base64-js: "npm:^1.3.1"
     ieee754: "npm:^1.2.1"
   checksum: 10c0/2a905fbbcde73cc5d8bd18d1caa23715d5f83a5935867c2329f0ac06104204ba7947be098fe1317fbd8830e26090ff8e764f08cd14fefc977bb248c3487bcbd0
-  languageName: node
-  linkType: hard
-
-"builtin-modules@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "builtin-modules@npm:4.0.0"
-  checksum: 10c0/c10c71c35a1a9b2c5fbb58c1b7eed3f38f16ec0903de55dfa54604ff19895dd7f35b79e5bb0756fc09642714d637ca905653b35ba76c00ae29310ca5c9668bf5
   languageName: node
   linkType: hard
 
@@ -5200,7 +5135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.13, dayjs@npm:^1.11.9":
+"dayjs@npm:^1.11.9":
   version: 1.11.13
   resolution: "dayjs@npm:1.11.13"
   checksum: 10c0/a3caf6ac8363c7dade9d1ee797848ddcf25c1ace68d9fe8678ecf8ba0675825430de5d793672ec87b24a69bf04a1544b176547b2539982275d5542a7955f35b7
@@ -13008,7 +12943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:>=3 < 6, typescript@npm:^5.5.3, typescript@npm:^5.6.3":
+"typescript@npm:>=3 < 6, typescript@npm:^5.5.3":
   version: 5.6.3
   resolution: "typescript@npm:5.6.3"
   bin:
@@ -13018,33 +12953,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:~4.5.4":
-  version: 4.5.5
-  resolution: "typescript@npm:4.5.5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/ac15b92f3dcd9a4233cab288a913ccbd96729fc488181396fa93c0297ccef3cd3c2f9a7a63340efb0d07bff3d5026028fc81b9c1ef08076029e057081eb5884b
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.6.3#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>":
   version: 5.6.3
   resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=74658d"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A~4.5.4#optional!builtin<compat/typescript>":
-  version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#optional!builtin<compat/typescript>::version=4.5.5&hash=f1b8ea"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/c699912602518eca36f101f61492608733da8305ba93a82291fbb29508da56e360b10f35f56fd9a53406db9ea2c261d30efd4ec1d9253ff45fdb5541b9d0381c
   languageName: node
   linkType: hard
 

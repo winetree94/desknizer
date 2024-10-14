@@ -4,7 +4,7 @@ import '@mantine/core/styles.css';
 
 import { ActionIcon, Flex, rem, Tabs } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IoClose, IoAdd } from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 import { IconMessageCircle, IconPhoto } from '@tabler/icons-react';
 import { Extensions } from './tabs/Extensions';
 import { Settings } from './tabs/Settings';
@@ -20,7 +20,12 @@ export function IndexPage() {
       <Flex>
         <Flex className='drag-region' flex='1 1 auto'></Flex>
         <Flex>
-          <ActionIcon variant='subtle' color='black' aria-label='Settings'>
+          <ActionIcon
+            variant='subtle'
+            color='black'
+            aria-label='Settings'
+            onClick={() => window.close()}
+          >
             <IoClose style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
         </Flex>

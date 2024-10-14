@@ -18,5 +18,10 @@
     "strictPropertyInitialization": false,
     "moduleResolution": "node",
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    "src",
+    "windows",
+    "../types/window.d.ts",
+  ]
 }

@@ -1,6 +1,7 @@
 import { app, Menu, Tray } from 'electron';
 import path from 'path';
 import { SettingsWindowManager } from './settings';
+import { ExtensionManager, ExtensionMeta } from './extension';
 
 let tray: Tray | null = null;
 
@@ -21,15 +22,15 @@ const load = async () => {
     {
       type: 'submenu',
       label: 'Extensions',
-      submenu: [
-        {
-          label: 'Note 1',
+      submenu: Object.values(ExtensionMeta).map((meta) => {
+        return {
+          label: meta.name,
           type: 'normal',
           click: () => {
-            console.log('Extension 1');
+            ExtensionManager.openExtensionSettings(meta.id);
           },
-        },
-      ],
+        };
+      }),
     },
     {
       label: 'Quit',

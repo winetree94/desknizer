@@ -1,5 +1,5 @@
 import NoteMeta from '@note-extension/note/package.json';
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import path from 'path';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
@@ -8,19 +8,20 @@ import {
   UserExtension,
   UserExtensionItem,
 } from './database/entities/UserExtension';
+import { handleIpc } from './ipc-main';
 
 export const ExtensionMeta: {
   [key: string]: {
+    id: string;
     name: string;
     description: string;
-    uuid: string;
     devPort: number;
   };
 } = {
   [NoteMeta.extensionConfigs.uuid]: {
+    id: NoteMeta.extensionConfigs.uuid,
     name: NoteMeta.extensionConfigs.name,
     description: NoteMeta.extensionConfigs.description,
-    uuid: NoteMeta.extensionConfigs.uuid,
     devPort: NoteMeta.extensionConfigs.devPort,
   },
 } as const;
@@ -62,94 +63,61 @@ const openExtensionSettings = (extensionId: string) => {
   openedExtensionSettings[extensionId] = window;
 };
 
-/**
- * @description
- * 사용 가능한 익스텐션 목록을 반환
- */
-ipcMain.handle('get-extensions', async () => {
-  return ExtensionMeta;
+handleIpc('get-extensions', () => {
+  return Object.values(ExtensionMeta).map((extension) => ({
+    ...extension,
+    meta: {},
+  }));
 });
 
-/**
- * @description
- * 사용자의 익스텐션 설정 정보를 반환
- */
-ipcMain.handle(
-  'get-user-extension-info',
-  async (event, opts: { extensionId: string }) => {
-    const manager = DatabaseManager.get().manager;
-    const entity = await manager.findOne(UserExtension, {
-      where: {
-        id: opts.extensionId,
-      },
-    });
-    return entity;
+handleIpc('get-user-extension-info', async (event, opts) => {
+  const manager = DatabaseManager.get().manager;
+  const entity = await manager.findOne(UserExtension, {
+    where: {
+      id: opts.extensionId,
+    },
+  });
+  if (!entity) {
+    throw new Error('Extension not found');
   }
-);
+  return entity;
+});
 
-/**
- * @description
- * 사용자의 익스텐션 데이터 목록을 반환
- */
-ipcMain.handle(
-  'get-user-extension-items',
-  async (
-    event,
-    opts: {
-      extensionId: string;
-    }
-  ) => {
-    const manager = DatabaseManager.get().manager;
-    const found = await manager.findOne(UserExtension, {
-      where: {
-        id: opts.extensionId,
-      },
-      relations: ['items'],
-    });
-    if (found) {
-      return found.items;
-    }
-    return [];
+handleIpc('get-user-extension-items', async (event, opts) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtension, {
+    where: {
+      id: opts.extensionId,
+    },
+    relations: ['items'],
+  });
+  if (found) {
+    return found.items;
   }
-);
+  return [];
+});
 
-/**
- * @description
- * 사용자의 익스텐션 아이템 데이터를 생성
- */
-ipcMain.handle(
-  'create-user-extension-item',
-  async (
-    event,
-    opts: {
-      extensionId: string;
-      data: object;
-    }
-  ) => {
-    const manager = DatabaseManager.get().manager;
-    const found = await manager.findOne(UserExtension, {
-      where: {
-        id: opts.extensionId,
-      },
-      relations: ['items'],
-    });
-    if (found) {
-      const item = new UserExtensionItem();
-      item.data = opts.data;
-      item.userExtension = found;
-      await manager.save(item);
-      return item;
-    }
-    return null;
+handleIpc('create-user-extension-item', async (event, opts) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtension, {
+    where: {
+      id: opts.extensionId,
+    },
+    relations: ['items'],
+  });
+  if (!found) {
+    throw new Error('Extension not found');
   }
-);
+  const item = new UserExtensionItem<object, object>();
+  item.data = opts.data as object;
+  item.userExtension = found;
+  await manager.save(item);
+  return item;
+});
 
-ipcMain.on(
-  'open-extension-settings',
-  (event, opts: { extensionId: string }) => {
-    ExtensionManager.openExtensionSettings(opts.extensionId);
-  }
-);
+handleIpc('open-extension-settings', (event, opts: { extensionId: string }) => {
+  ExtensionManager.openExtensionSettings(opts.extensionId);
+});
 
 export const ExtensionManager = {
   load: async () => {
@@ -159,12 +127,12 @@ export const ExtensionManager = {
       for (const extension of extensions) {
         const found = await manager.findOne(UserExtension, {
           where: {
-            id: extension.uuid,
+            id: extension.id,
           },
         });
         if (!found) {
           const entity = new UserExtension();
-          entity.id = extension.uuid;
+          entity.id = extension.id;
           entity.meta = {};
           await manager.save(entity);
         }

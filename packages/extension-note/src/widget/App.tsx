@@ -15,8 +15,12 @@ export function App() {
             color='black'
             aria-label='Settings'
             onClick={() => {
-              window.electron.send('create-widget', {
-                extensionId: Meta.extensionConfigs.uuid,
+              window.electron.ipcRenderer.invoke('create-widget', {
+                id: Meta.extensionConfigs.uuid,
+                data: {
+                  x: 0,
+                  y: 0,
+                },
               });
             }}
           >

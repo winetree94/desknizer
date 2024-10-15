@@ -15,11 +15,12 @@ if (require('electron-squirrel-startup')) {
 
 app.whenReady().then(async () => {
   await Promise.all([
-    DatabaseManager.load().then(() => ExtensionManager.load()),
+    DatabaseManager.load().then(() =>
+      Promise.all([ExtensionManager.load(), WidgetManager.load()])
+    ),
     TrayManager.load(),
     SettingsWindowManager.load(),
     ProtocolManager.load(),
-    WidgetManager.load(),
   ]);
 });
 

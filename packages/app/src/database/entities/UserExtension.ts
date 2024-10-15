@@ -1,11 +1,12 @@
 import {
   Column,
-  Entity,
-  JoinColumn,
+  Entity, JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne, PrimaryColumn,
+  OneToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
+  Relation,
 } from 'typeorm';
 
 @Entity()
@@ -23,7 +24,7 @@ export class UserExtension<META extends object, DATA extends object> {
   meta: META;
 
   @OneToMany(() => UserExtensionItem, (item) => item.userExtension)
-  items: UserExtensionItem<META, DATA>[];
+  items: Relation<UserExtensionItem<META, DATA>[]>;
 }
 
 @Entity()
@@ -32,7 +33,11 @@ export class UserExtensionItem<T extends object, I extends object> {
   id: string;
 
   @ManyToOne(() => UserExtension, (userExtension) => userExtension.items)
-  userExtension: UserExtension<T, I>;
+  userExtension: Relation<UserExtension<T, I>>;
+
+  @OneToOne(() => UserWidget, (widget) => widget.userExtensionItem)
+  @JoinColumn({ name: 'widget_id' })
+  widget: Relation<UserWidget<T, I>>;
 
   @Column({
     type: 'text',
@@ -49,9 +54,9 @@ export class UserWidget<T extends object, I extends object> {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => UserExtensionItem, (item) => item.userExtension)
-  @JoinColumn()
-  userExtensionItem: UserExtensionItem<T, I>;
+  @OneToOne(() => UserExtensionItem, (item) => item.widget)
+  @JoinColumn({ name: 'extension_item_id' })
+  userExtensionItem: Relation<UserExtensionItem<T, I>>;
 
   @Column()
   x: number;

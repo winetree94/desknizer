@@ -21,11 +21,7 @@ export function App() {
               variant='subtle'
               color='black'
               aria-label='Settings'
-              onClick={() => {
-                window.electron.send('create-widget', {
-                  type: 'note',
-                });
-              }}
+              onClick={() => {}}
             >
               <IoAdd style={{ width: '70%', height: '70%' }} />
             </ActionIcon>

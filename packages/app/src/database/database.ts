@@ -8,8 +8,10 @@ import {
 } from './entities/UserExtension';
 import { UserExtensionSubscriber } from './subscribers/UserExtensionSubscriber';
 import { UserExtensionItemSubscriber } from './subscribers/UserExtensionItemSubscriber';
+import { UserWidgetSubscriber } from './subscribers/UserWidgetSubscriber';
 
 const databasePath = path.join(app.getPath('userData'), 'note.db');
+console.log('db path: ', databasePath);
 
 const db = new DataSource({
   type: 'sqlite',
@@ -17,7 +19,11 @@ const db = new DataSource({
   synchronize: true,
   logging: true,
   entities: [UserExtension, UserExtensionItem, UserWidget],
-  subscribers: [UserExtensionSubscriber, UserExtensionItemSubscriber],
+  subscribers: [
+    UserExtensionSubscriber,
+    UserExtensionItemSubscriber,
+    UserWidgetSubscriber,
+  ],
 });
 
 let initialized = false;

@@ -13,52 +13,57 @@ import {
 } from '@mantine/core';
 import { IoClose, IoAdd } from 'react-icons/io5';
 import Meta from '../../package.json';
+import { ExtensionItem } from '@note/types/entity';
 
-interface NoteItem {
-  id: string;
-  data: {
-    content: string;
-  };
+interface NoteMeta {
+  content: string;
+}
+
+interface NoteData {
+  content: string;
 }
 
 export function App() {
-  const [contents, setContents] = useState<NoteItem[]>([]);
+  const [contents, setContents] = useState<ExtensionItem<NoteData>[]>([]);
 
   useEffect(() => {
-    window.electron.on('user-extension-updated', (data) => {
+    window.electron.ipcRenderer.on('user-extension-updated', (data) => {
       console.log(data);
     });
   }, []);
 
   useEffect(() => {
     const getter = async () => {
-      // const extensionInfo = await window.electron.invoke<
+      const extensionInfo = await window.electron.ipcRenderer.invoke<NoteMeta>(
+        'get-user-extension-info',
+        {
+          extensionId: Meta.extensionConfigs.uuid,
+        }
+      );
+      console.log(extensionInfo);
+      // const extensionItems = await window.electron.invoke<
       //   {
       //     extensionId: string;
       //   },
-      //   {
-      //     id: string;
-      //     meta: {};
-      //   }
-      // >('get-user-extension-info', {
+      //   NoteItem[]
+      // >('get-user-extension-items', {
       //   extensionId: Meta.extensionConfigs.uuid,
       // });
-
-      const extensionItems = await window.electron.invoke<
+      const extensionItems = await window.electron.ipcRenderer.invoke<NoteData>(
+        'get-user-extension-items',
         {
-          extensionId: string;
-        },
-        NoteItem[]
-      >('get-user-extension-items', {
-        extensionId: Meta.extensionConfigs.uuid,
-      });
-
+          extensionId: Meta.extensionConfigs.uuid,
+        }
+      );
       setContents(() => extensionItems);
     };
 
-    window.electron.on('user-extension-item-inserted', (event, data) => {
-      console.log('inserted', event, data);
-    });
+    window.electron.ipcRenderer.on<NoteData>(
+      'user-extension-item-inserted',
+      (event, data) => {
+        console.log('inserted', event, data);
+      }
+    );
 
     getter();
   }, []);
@@ -72,25 +77,21 @@ export function App() {
             color='black'
             aria-label='Settings'
             onClick={async () => {
-              const entity = await window.electron.invoke<
+              const entity = await window.electron.ipcRenderer.invoke<NoteData>(
+                'create-user-extension-item',
                 {
-                  extensionId: string;
+                  extensionId: Meta.extensionConfigs.uuid,
                   data: {
-                    content: string;
-                  };
-                },
-                {
-                  id: string;
-                  meta: object;
+                    content: 'This is a new note',
+                  },
                 }
-              >('create-user-extension-item', {
-                extensionId: Meta.extensionConfigs.uuid,
+              );
+              await window.electron.ipcRenderer.invoke('create-widget', {
+                id: entity.id,
                 data: {
-                  content: 'This is a new note',
+                  x: 0,
+                  y: 0,
                 },
-              });
-              await window.electron.invoke('create-widget', {
-                dataId: entity.id,
               });
               console.log(entity);
               // window.electron.send('create-widget', {

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 export function Extensions() {
   const [data, setData] = useState<
     {
-      uuid: string;
+      id: string;
       name: string;
       description: string;
     }[]
@@ -13,14 +13,9 @@ export function Extensions() {
 
   useEffect(() => {
     const runner = async () => {
-      const extensions = (await window.electron.invoke('get-extensions')) as {
-        [key: string]: {
-          name: string;
-          description: string;
-          uuid: string;
-        };
-      };
-      setData(Object.values(extensions));
+      const extensions =
+        await window.electron.ipcRenderer.invoke('get-extensions');
+      setData(extensions);
     };
     runner();
   }, []);
@@ -29,16 +24,16 @@ export function Extensions() {
     <ScrollArea scrollbars='y' h='100%'>
       {data.map((extension) => {
         return (
-          <Flex key={extension.uuid} p='md' w='100%' justify='space-between'>
+          <Flex key={extension.id} p='md' w='100%' justify='space-between'>
             <Checkbox defaultChecked label={extension.name} />
             <ActionIcon
               variant='subtle'
               color='gray'
               aria-label='Settings'
               onClick={() => {
-                console.log(extension.uuid);
-                window.electron.send('open-extension-settings', {
-                  extensionId: extension.uuid,
+                console.log(extension.id);
+                window.electron.ipcRenderer.invoke('open-extension-settings', {
+                  extensionId: extension.id,
                 });
               }}
             >

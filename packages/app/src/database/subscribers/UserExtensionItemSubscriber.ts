@@ -35,10 +35,7 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     const targetWindow = ExtensionManager.getOpenedExtensionWindow(
       event.entity?.userExtension.id
     );
-    targetWindow?.webContents.send(
-      'user-extension-item-inserted',
-      event.entity
-    );
+    targetWindow?.webContents.send('user-extension-item-updated', event.entity);
   }
 
   afterRemove(

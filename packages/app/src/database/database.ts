@@ -14,7 +14,7 @@ const databasePath = path.join(app.getPath('userData'), 'note.db');
 console.log('db path: ', databasePath);
 
 const db = new DataSource({
-  type: 'sqlite',
+  type: 'better-sqlite3',
   database: databasePath,
   synchronize: true,
   logging: true,

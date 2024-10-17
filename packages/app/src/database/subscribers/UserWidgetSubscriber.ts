@@ -50,7 +50,7 @@ export class UserWidgetSubscriber<T extends object, I extends object>
     });
   }
 
-  public beforeRemove(
+  public afterRemove(
     event: RemoveEvent<UserWidget<T, I>>
   ): Promise<void> | void {
     const window = WidgetManager.openedWidgetWindows.get(event.entityId);

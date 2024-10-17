@@ -19,9 +19,9 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     return UserExtensionItem;
   }
 
-  afterInsert(
+  public async afterInsert(
     event: InsertEvent<UserExtensionItem<T, I>>
-  ): Promise<void> | void {
+  ): Promise<void> {
     const targetWindow = ExtensionManager.getOpenedExtensionWindow(
       event.entity.userExtension.id
     );
@@ -30,9 +30,9 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     });
   }
 
-  afterUpdate(
+  public async afterUpdate(
     event: UpdateEvent<UserExtensionItem<T, I>>
-  ): Promise<void> | void {
+  ): Promise<void> {
     if (!event.entity) {
       return;
     }
@@ -44,27 +44,31 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     });
   }
 
-  beforeRemove(
+  public async beforeRemove(
     event: RemoveEvent<UserExtensionItem<T, I>>
-  ): Promise<void> | void {
-    // const manager = DatabaseManager.get().manager;
-    // const foundEntity = manager.findOne(UserExtensionItem, {
-    //   where: {
-    //     id: event.entityId,
-    //   },
-    //   relations: {
-    //     userExtension: true,
-    //   },
-    // });
-    // console.log(foundEntity);
-    // if (!event.entityId) {
-    //   return;
-    // }
-    // const targetWindow = ExtensionManager.getOpenedExtensionWindow(
-    //   event.entityId
-    // );
-    // sendWindow(targetWindow, 'user-extension-item-deleted', {
-    //   id: event.entityId,
-    // });
+  ): Promise<void> {
+    console.log(event.entity, event.entityId);
+    const manager = DatabaseManager.get().manager;
+    const foundEntity = await manager.findOne(UserExtensionItem, {
+      where: {
+        id: event.entityId,
+      },
+      relations: {
+        userExtension: true,
+      },
+    });
+    if (!foundEntity) {
+      return;
+    }
+    const targetWindow = ExtensionManager.getOpenedExtensionWindow(
+      foundEntity.userExtension.id
+    );
+    if (!targetWindow) {
+      return;
+    }
+    console.log('sendWindow', targetWindow);
+    sendWindow(targetWindow, 'user-extension-item-deleted', {
+      id: event.entityId,
+    });
   }
 }

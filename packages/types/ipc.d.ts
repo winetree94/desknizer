@@ -24,10 +24,10 @@ export interface IpcRendererOnEventListeners {
     ) => void
   ): void;
   <R>(
-    event: 'user-extension-updated',
+    event: 'user-extension-item-updated',
     listener: (
       event: IpcRendererEvent,
-      data: OnUserExtensionItemUpdatedArgs<R>
+      item: OnUserExtensionItemUpdatedArgs<R>
     ) => void
   ): void;
   (
@@ -35,6 +35,13 @@ export interface IpcRendererOnEventListeners {
     listener: (
       event: IpcRendererEvent,
       data: OnUserExtensionItemDeletedArgs
+    ) => void
+  ): void;
+  <R>(
+    event: 'user-extension-updated',
+    listener: (
+      event: IpcRendererEvent,
+      data: OnUserExtensionItemUpdatedArgs<R>
     ) => void
   ): void;
 }

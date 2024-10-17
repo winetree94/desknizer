@@ -3,12 +3,22 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 import { PreloadApis } from '@note/types/preload';
+import { IpcRendererOnEventListeners } from '@note/types/ipc';
+
+// @es-lint-ignore
+const on: IpcRendererOnEventListeners = (event: any, listener: any) => {
+  ipcRenderer.on(event, listener);
+};
+
+const removeListener = (event: string, listener: (...args: any[]) => void) => {
+  return ipcRenderer.removeListener(event, listener);
+};
 
 const apis: PreloadApis['electron'] = {
   ipcRenderer: {
-    on: ipcRenderer.on,
+    on: on,
     invoke: ipcRenderer.invoke,
-    removeListener: ipcRenderer.removeListener,
+    removeListener: removeListener,
   },
 };
 

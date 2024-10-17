@@ -172,6 +172,7 @@ export const ExtensionManager = {
   openedExtensionSettings: openedExtensionSettings,
   openExtensionSettings: openExtensionSettings,
   getOpenedExtensionWindow: (extensionId: string) => {
+    console.log('openedExtensionSettings: ', extensionId);
     console.log(openedExtensionSettings);
     return openedExtensionSettings[extensionId];
   },

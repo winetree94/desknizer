@@ -33,15 +33,14 @@ export function App() {
       _: IpcRendererEvent,
       data: OnUserExtensionItemInsertedArgs<NoteData>
     ) => {
-      console.log('inserted');
       setContents((prev) => [
-        ...prev,
         {
           id: data.item.id,
           data: {
             content: data.item.data.content,
           },
         },
+        ...prev,
       ]);
     };
 
@@ -71,6 +70,19 @@ export function App() {
       setContents((prev) => prev.filter((item) => item.id !== data.id));
     };
 
+    const insertUnsubscribe = window.electron.ipcRenderer.on(
+      'user-extension-item-inserted',
+      onUserExtensionItemInserted
+    );
+    const updateUnsubscribe = window.electron.ipcRenderer.on(
+      'user-extension-item-updated',
+      onUserExtensionItemUpdated
+    );
+    const deletedUnsubscribe = window.electron.ipcRenderer.on(
+      'user-extension-item-deleted',
+      onUserExtensionItemDeleted
+    );
+
     const init = async () => {
       const extensionItems = await window.electron.ipcRenderer.invoke<NoteData>(
         'get-user-extension-items',
@@ -78,37 +90,15 @@ export function App() {
           extensionId: Meta.extensionConfigs.uuid,
         }
       );
-      setContents(extensionItems);
-      window.electron.ipcRenderer.on(
-        'user-extension-item-inserted',
-        onUserExtensionItemInserted
-      );
-      window.electron.ipcRenderer.on(
-        'user-extension-item-updated',
-        onUserExtensionItemUpdated
-      );
-      window.electron.ipcRenderer.on(
-        'user-extension-item-deleted',
-        onUserExtensionItemDeleted
-      );
+      setContents(extensionItems.reverse());
     };
 
     init().then();
 
     return () => {
-      console.log('deinit');
-      window.electron.ipcRenderer.removeListener(
-        'user-extension-item-inserted',
-        onUserExtensionItemInserted
-      );
-      window.electron.ipcRenderer.removeListener(
-        'user-extension-item-updated',
-        onUserExtensionItemUpdated
-      );
-      window.electron.ipcRenderer.removeListener(
-        'user-extension-item-deleted',
-        onUserExtensionItemDeleted
-      );
+      insertUnsubscribe();
+      updateUnsubscribe();
+      deletedUnsubscribe();
     };
   }, []);
 
@@ -151,15 +141,7 @@ export function App() {
               );
               await window.electron.ipcRenderer.invoke('create-widget', {
                 id: entity.id,
-                // data: {
-                //   x: 0,
-                //   y: 0,
-                // },
               });
-              console.log(entity);
-              // window.electron.send('create-widget', {
-              //   extensionId: Meta.extensionConfigs.uuid,
-              // });
             }}
           >
             <IoAdd style={{ width: '70%', height: '70%' }} />

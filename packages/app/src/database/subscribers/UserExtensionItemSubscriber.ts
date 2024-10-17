@@ -5,7 +5,7 @@ import {
   UpdateEvent,
   RemoveEvent,
 } from 'typeorm';
-import { UserExtension, UserExtensionItem } from '../entities/UserExtension';
+import { UserExtensionItem } from '../entities/UserExtension';
 import { ExtensionManager } from '../../extension';
 import { sendWindow } from '../../ipc-main';
 import { ExtensionItem } from '@note/types/entity';
@@ -47,7 +47,6 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
   public async beforeRemove(
     event: RemoveEvent<UserExtensionItem<T, I>>
   ): Promise<void> {
-    console.log(event.entity, event.entityId);
     const manager = DatabaseManager.get().manager;
     const foundEntity = await manager.findOne(UserExtensionItem, {
       where: {
@@ -66,7 +65,6 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     if (!targetWindow) {
       return;
     }
-    console.log('sendWindow', targetWindow);
     sendWindow(targetWindow, 'user-extension-item-deleted', {
       id: event.entityId,
     });

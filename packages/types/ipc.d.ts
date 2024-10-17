@@ -15,6 +15,8 @@ export type OnUserExtensionItemDeletedArgs = {
   id: string;
 };
 
+export type UnSubscribe = () => void;
+
 export interface IpcRendererOnEventListeners {
   <R>(
     event: 'user-extension-item-inserted',
@@ -22,28 +24,28 @@ export interface IpcRendererOnEventListeners {
       event: IpcRendererEvent,
       item: OnUserExtensionItemInsertedArgs<R>
     ) => void
-  ): void;
+  ): UnSubscribe;
   <R>(
     event: 'user-extension-item-updated',
     listener: (
       event: IpcRendererEvent,
       item: OnUserExtensionItemUpdatedArgs<R>
     ) => void
-  ): void;
+  ): UnSubscribe;
   (
     event: 'user-extension-item-deleted',
     listener: (
       event: IpcRendererEvent,
       data: OnUserExtensionItemDeletedArgs
     ) => void
-  ): void;
+  ): UnSubscribe;
   <R>(
     event: 'user-extension-updated',
     listener: (
       event: IpcRendererEvent,
       data: OnUserExtensionItemUpdatedArgs<R>
     ) => void
-  ): void;
+  ): UnSubscribe;
 }
 
 export interface HandleOpenExtensionSettingsRequest {

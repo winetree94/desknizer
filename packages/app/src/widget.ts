@@ -108,12 +108,23 @@ function parsePosition(
 }
 
 handleIpc('create-widget', async (event, args) => {
+  const manager = DatabaseManager.get().manager;
+  const existWidgetEntity = await manager.findOne(UserWidget, {
+    where: {
+      userExtensionItem: {
+        id: args.id,
+      },
+    },
+  });
+  if (existWidgetEntity) {
+    openedWidgetWindows.get(existWidgetEntity.id)?.focus();
+    return existWidgetEntity;
+  }
   const targetSize = {
     width: args.size?.width || 200,
     height: args.size?.height || 200,
   };
   const targetPos = parsePosition(targetSize, args.pos);
-  const manager = DatabaseManager.get().manager;
   const itemEntity = await manager.findOne(UserExtensionItem, {
     where: { id: args.id },
     relations: {

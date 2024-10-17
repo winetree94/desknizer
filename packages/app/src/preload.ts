@@ -5,20 +5,18 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { PreloadApis } from '@note/types/preload';
 import { IpcRendererOnEventListeners } from '@note/types/ipc';
 
-// @es-lint-ignore
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const on: IpcRendererOnEventListeners = (event: any, listener: any) => {
-  ipcRenderer.on(event, listener);
-};
-
-const removeListener = (event: string, listener: (...args: any[]) => void) => {
-  return ipcRenderer.removeListener(event, listener);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const subscriber = (...args: any[]) => listener(...args);
+  ipcRenderer.on(event, subscriber);
+  return () => ipcRenderer.removeListener(event, subscriber);
 };
 
 const apis: PreloadApis['electron'] = {
   ipcRenderer: {
     on: on,
     invoke: ipcRenderer.invoke,
-    removeListener: removeListener,
   },
 };
 

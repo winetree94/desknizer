@@ -4,11 +4,16 @@ import type { Extension, ExtensionItem } from './entity';
 export type IpcRendererEvent = Parameters<Parameters<IpcRenderer['on']>[1]>[0];
 
 export interface OnUserExtensionItemInsertedArgs<T> {
-  event: IpcRendererEvent;
   item: ExtensionItem<T>;
 }
 
-export type OnUserExtensionUpdatedArgs = unknown;
+export type OnUserExtensionItemUpdatedArgs<T> = {
+  item: ExtensionItem<T>;
+};
+
+export type OnUserExtensionItemDeletedArgs = {
+  id: string;
+};
 
 export interface IpcRendererOnEventListeners {
   <R>(
@@ -18,11 +23,18 @@ export interface IpcRendererOnEventListeners {
       item: OnUserExtensionItemInsertedArgs<R>
     ) => void
   ): void;
-  (
+  <R>(
     event: 'user-extension-updated',
     listener: (
       event: IpcRendererEvent,
-      data: OnUserExtensionUpdatedArgs
+      data: OnUserExtensionItemUpdatedArgs<R>
+    ) => void
+  ): void;
+  (
+    event: 'user-extension-item-deleted',
+    listener: (
+      event: IpcRendererEvent,
+      data: OnUserExtensionItemDeletedArgs
     ) => void
   ): void;
 }
@@ -46,6 +58,14 @@ export interface HandleGetUserExtensionItemsRequest {
 
 export type HandleGetUserExtensionItemsResponse<R> = ExtensionItem<R>[];
 
+export interface HandleDeleteUserExtensionItemRequest {
+  id: string;
+}
+
+export interface HandleDeleteUserExtensionItemResponse {
+  id: string;
+}
+
 export interface HandleCreateUserExtensionItemRequest<R> {
   extensionId: string;
   data: R;
@@ -55,7 +75,14 @@ export type HandleCreateUserExtensionItemResponse<R> = ExtensionItem<R>;
 
 export interface HandleCreateWidgetRequest {
   id: string;
-  data: { x: number; y: number };
+  pos?: {
+    x: number;
+    y: number;
+  };
+  size?: {
+    width: number;
+    height: number;
+  };
 }
 
 export interface HandleCreateWidgetResponse {
@@ -64,6 +91,18 @@ export interface HandleCreateWidgetResponse {
   y: number;
   width: number;
   height: number;
+}
+
+export type HandleUpdateWidgetRequest = HandleCreateWidgetRequest;
+
+export type HandleUpdateWidgetResponse = HandleCreateWidgetResponse;
+
+export interface HandleDeleteWidgetRequest {
+  id: string;
+}
+
+export interface HandleDeleteWidgetResponse {
+  id: string;
 }
 
 export type HandleGetExtensionsResponse = Extension<unknown>[];
@@ -81,6 +120,10 @@ export interface IpcRendererInvokeEventListeners {
     event: 'get-user-extension-items',
     args: HandleGetUserExtensionItemsRequest
   ): Promise<HandleGetUserExtensionItemsResponse<R>>;
+  (
+    event: 'delete-user-extension-item',
+    args: HandleDeleteUserExtensionItemRequest
+  ): Promise<HandleDeleteUserExtensionItemResponse>;
   <R>(
     event: 'create-user-extension-item',
     args: HandleCreateUserExtensionItemRequest<R>
@@ -89,5 +132,13 @@ export interface IpcRendererInvokeEventListeners {
     event: 'create-widget',
     args: HandleCreateWidgetRequest
   ): Promise<HandleCreateWidgetResponse>;
+  (
+    event: 'update-widget',
+    args: HandleUpdateWidgetRequest
+  ): Promise<HandleUpdateWidgetResponse>;
+  (
+    event: 'delete-widget',
+    args: HandleDeleteWidgetRequest
+  ): Promise<HandleDeleteWidgetResponse>;
   (event: 'get-extensions'): Promise<HandleGetExtensionsResponse>;
 }

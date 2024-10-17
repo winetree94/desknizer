@@ -10,6 +10,15 @@ import {
   HandleGetUserExtensionInfoResponse,
   HandleOpenExtensionSettingsRequest,
   HandleGetExtensionsResponse,
+  HandleDeleteWidgetRequest,
+  HandleDeleteWidgetResponse,
+  HandleUpdateWidgetRequest,
+  HandleUpdateWidgetResponse,
+  HandleDeleteUserExtensionItemRequest,
+  HandleDeleteUserExtensionItemResponse,
+  OnUserExtensionItemInsertedArgs,
+  OnUserExtensionItemUpdatedArgs,
+  OnUserExtensionItemDeletedArgs,
 } from '@note/types/ipc';
 
 interface IpcHandlers {
@@ -38,6 +47,11 @@ interface IpcHandlers {
     response: HandleGetUserExtensionItemsResponse<unknown>;
   };
 
+  'delete-user-extension-item': {
+    request: HandleDeleteUserExtensionItemRequest;
+    response: HandleDeleteUserExtensionItemResponse;
+  };
+
   /**
    * @description
    * 사용자의 익스텐션 아이템 데이터를 생성
@@ -54,6 +68,16 @@ interface IpcHandlers {
   'create-widget': {
     request: HandleCreateWidgetRequest;
     response: HandleCreateWidgetResponse;
+  };
+
+  'update-widget': {
+    request: HandleUpdateWidgetRequest;
+    response: HandleUpdateWidgetResponse;
+  };
+
+  'delete-widget': {
+    request: HandleDeleteWidgetRequest;
+    response: HandleDeleteWidgetResponse;
   };
 
   /**
@@ -77,20 +101,32 @@ export function handleIpc<K extends keyof IpcHandlers>(
   ipcMain.handle(channel, listener);
 }
 
-interface IpcOnEventListeners {
-  'create-widget': {
-    request: {
-      id: string;
-    };
+interface SendEventListeners {
+  'user-extension-item-inserted': {
+    request: OnUserExtensionItemInsertedArgs<unknown>;
+  };
+  'user-extension-item-updated': {
+    request: OnUserExtensionItemUpdatedArgs<unknown>;
+  };
+  'user-extension-item-deleted': {
+    request: OnUserExtensionItemDeletedArgs;
   };
 }
 
+export function sendWindow<K extends keyof SendEventListeners>(
+  window: Electron.BrowserWindow,
+  channel: K,
+  args: SendEventListeners[K]['request']
+) {
+  window.webContents.send(channel, args);
+}
+
 // 각 채널에 맞는 핸들러 등록 함수
-export function onIpc<K extends keyof IpcOnEventListeners>(
+export function onIpc<K extends keyof SendEventListeners>(
   channel: K,
   listener: (
     event: IpcMainEvent,
-    args: IpcOnEventListeners[K]['request']
+    args: SendEventListeners[K]['request']
   ) => void
 ) {
   ipcMain.on(channel, listener);

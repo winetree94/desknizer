@@ -11,7 +11,7 @@ import {
   Card,
   Input,
 } from '@mantine/core';
-import { IoClose, IoAdd } from 'react-icons/io5';
+import { IoClose, IoAdd, IoTrashOutline } from 'react-icons/io5';
 import Meta from '../../package.json';
 import { ExtensionItem } from '@note/types/entity';
 
@@ -27,8 +27,42 @@ export function App() {
   const [contents, setContents] = useState<ExtensionItem<NoteData>[]>([]);
 
   useEffect(() => {
-    window.electron.ipcRenderer.on('user-extension-updated', (data) => {
-      console.log(data);
+    window.electron.ipcRenderer.on<NoteData>(
+      'user-extension-updated',
+      (_, data) => {
+        setContents((prev) => [
+          ...prev.filter((item) => item.id !== data.item.id),
+          {
+            id: data.item.id,
+            data: {
+              content: data.item.data.content,
+            },
+          },
+        ]);
+      }
+    );
+
+    window.electron.ipcRenderer.on<NoteData>(
+      'user-extension-updated',
+      (_, data) => {
+        setContents((prev) => {
+          return prev.map((item) => {
+            if (item.id === data.item.id) {
+              return {
+                id: data.item.id,
+                data: {
+                  content: data.item.data.content,
+                },
+              };
+            }
+            return item;
+          });
+        });
+      }
+    );
+
+    window.electron.ipcRenderer.on('user-extension-item-deleted', (_, data) => {
+      setContents((prev) => prev.filter((item) => item.id !== data.id));
     });
   }, []);
 
@@ -88,10 +122,10 @@ export function App() {
               );
               await window.electron.ipcRenderer.invoke('create-widget', {
                 id: entity.id,
-                data: {
-                  x: 0,
-                  y: 0,
-                },
+                // data: {
+                //   x: 0,
+                //   y: 0,
+                // },
               });
               console.log(entity);
               // window.electron.send('create-widget', {
@@ -129,8 +163,29 @@ export function App() {
                 padding='lg'
                 radius='md'
                 withBorder
+                onClick={async () => {
+                  await window.electron.ipcRenderer.invoke('create-widget', {
+                    id: content.id,
+                  });
+                }}
               >
                 <Text size='sm'>{content.data.content}</Text>
+                <ActionIcon
+                  variant='subtle'
+                  color='black'
+                  aria-label='Settings'
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await window.electron.ipcRenderer.invoke(
+                      'delete-user-extension-item',
+                      {
+                        id: content.id,
+                      }
+                    );
+                  }}
+                >
+                  <IoTrashOutline style={{ width: '70%', height: '70%' }} />
+                </ActionIcon>
               </Card>
             ))}
           </Flex>

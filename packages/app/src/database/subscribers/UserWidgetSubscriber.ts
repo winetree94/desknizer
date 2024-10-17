@@ -12,23 +12,51 @@ import { WidgetManager } from '../../widget';
 export class UserWidgetSubscriber<T extends object, I extends object>
   implements EntitySubscriberInterface<UserWidget<T, I>>
 {
-  listenTo() {
+  public listenTo() {
     return UserWidget;
   }
 
-  afterInsert(event: InsertEvent<UserWidget<T, I>>): Promise<void> | void {
-    console.log('widget created');
-    console.log(event.entity);
+  public afterInsert(
+    event: InsertEvent<UserWidget<T, I>>
+  ): Promise<void> | void {
     if (WidgetManager.openedWidgetWindows.get(event.entity.id)) {
       return;
     }
     WidgetManager.createWidgetWindow({
       extensionId: event.entity.userExtensionItem.userExtension.id,
       widgetId: event.entity.id,
+      x: event.entity.x,
+      y: event.entity.y,
+      width: event.entity.width,
+      height: event.entity.height,
     });
   }
 
-  afterUpdate(event: UpdateEvent<UserWidget<T, I>>): Promise<void> | void {}
+  public afterUpdate(
+    event: UpdateEvent<UserWidget<T, I>>
+  ): Promise<void> | void {
+    if (!event.entity) {
+      return;
+    }
+    const window = WidgetManager.openedWidgetWindows.get(event.entity.id);
+    if (!window) {
+      return;
+    }
+    window.setBounds({
+      x: event.entity.x,
+      y: event.entity.y,
+      width: event.entity.width,
+      height: event.entity.height,
+    });
+  }
 
-  afterRemove(event: RemoveEvent<UserWidget<T, I>>): Promise<void> | void {}
+  public beforeRemove(
+    event: RemoveEvent<UserWidget<T, I>>
+  ): Promise<void> | void {
+    const window = WidgetManager.openedWidgetWindows.get(event.entityId);
+    if (!window) {
+      return;
+    }
+    window.close();
+  }
 }

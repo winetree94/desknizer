@@ -7,6 +7,7 @@ import { DatabaseManager } from './database/database';
 import {
   UserExtension,
   UserExtensionItem,
+  UserWidget,
 } from './database/entities/UserExtension';
 import { handleIpc } from './ipc-main';
 
@@ -95,6 +96,35 @@ handleIpc('get-user-extension-items', async (event, opts) => {
     return found.items;
   }
   return [];
+});
+
+handleIpc('delete-user-extension-item', async (event, opts) => {
+  const manager = DatabaseManager.get().manager;
+
+  await manager.transaction(async (manager) => {
+    const itemEntity = await manager.findOne(UserExtensionItem, {
+      where: {
+        id: opts.id,
+      },
+    });
+    if (!itemEntity) {
+      return;
+    }
+    const widgetEntity = await manager.findOne(UserWidget, {
+      where: {
+        userExtensionItem: itemEntity,
+      },
+    });
+    if (widgetEntity) {
+      await manager.remove(widgetEntity);
+    }
+    await manager.remove(itemEntity);
+    return itemEntity;
+  });
+
+  return {
+    id: opts.id,
+  };
 });
 
 handleIpc('create-user-extension-item', async (event, opts) => {

@@ -5,9 +5,11 @@ import {
   UpdateEvent,
   RemoveEvent,
 } from 'typeorm';
-import { ipcMain } from 'electron';
-import { UserExtensionItem } from '../entities/UserExtension';
+import { UserExtension, UserExtensionItem } from '../entities/UserExtension';
 import { ExtensionManager } from '../../extension';
+import { sendWindow } from '../../ipc-main';
+import { ExtensionItem } from '@note/types/entity';
+import { DatabaseManager } from '../database';
 
 @EventSubscriber()
 export class UserExtensionItemSubscriber<T extends object, I extends object>
@@ -23,29 +25,46 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     const targetWindow = ExtensionManager.getOpenedExtensionWindow(
       event.entity.userExtension.id
     );
-    targetWindow?.webContents.send(
-      'user-extension-item-inserted',
-      event.entity
-    );
+    sendWindow(targetWindow, 'user-extension-item-inserted', {
+      item: event.entity,
+    });
   }
 
   afterUpdate(
     event: UpdateEvent<UserExtensionItem<T, I>>
   ): Promise<void> | void {
+    if (!event.entity) {
+      return;
+    }
     const targetWindow = ExtensionManager.getOpenedExtensionWindow(
-      event.entity?.userExtension.id
+      event.entity.userExtension.id
     );
-    targetWindow?.webContents.send('user-extension-item-updated', event.entity);
+    sendWindow(targetWindow, 'user-extension-item-updated', {
+      item: event.entity as ExtensionItem<unknown>,
+    });
   }
 
-  afterRemove(
+  beforeRemove(
     event: RemoveEvent<UserExtensionItem<T, I>>
   ): Promise<void> | void {
-    console.log('UserExtensionItemSubscriber.afterRemove', event.entityId);
-    ipcMain.emit('user-extension-item-removed', event.entityId);
-
-    // ExtensionManager.getOpenedExtensionWindow(
-    //   event.entity.userExtension.id
-    // )?.webContents.send('user-extension-item-removed', event.entity
+    // const manager = DatabaseManager.get().manager;
+    // const foundEntity = manager.findOne(UserExtensionItem, {
+    //   where: {
+    //     id: event.entityId,
+    //   },
+    //   relations: {
+    //     userExtension: true,
+    //   },
+    // });
+    // console.log(foundEntity);
+    // if (!event.entityId) {
+    //   return;
+    // }
+    // const targetWindow = ExtensionManager.getOpenedExtensionWindow(
+    //   event.entityId
+    // );
+    // sendWindow(targetWindow, 'user-extension-item-deleted', {
+    //   id: event.entityId,
+    // });
   }
 }

@@ -10,6 +10,7 @@ import { ExtensionManager } from '../../extension';
 import { sendWindow } from '../../ipc-main';
 import { ExtensionItem } from '@note/types/entity';
 import { DatabaseManager } from '../database';
+import { WidgetManager } from '../../widget';
 
 @EventSubscriber()
 export class UserExtensionItemSubscriber<T extends object, I extends object>
@@ -30,18 +31,43 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     });
   }
 
-  public async afterUpdate(
+  public async beforeUpdate(
     event: UpdateEvent<UserExtensionItem<T, I>>
   ): Promise<void> {
     if (!event.entity) {
       return;
     }
-    const targetWindow = ExtensionManager.getOpenedExtensionWindow(
-      event.entity.userExtension.id
-    );
-    sendWindow(targetWindow, 'user-extension-item-updated', {
-      item: event.entity as ExtensionItem<unknown>,
+    const manager = DatabaseManager.get().manager;
+    const foundEntity = await manager.findOne(UserExtensionItem, {
+      where: {
+        id: event.entity.id,
+      },
+      relations: {
+        widget: true,
+        userExtension: true,
+      },
     });
+    if (!foundEntity) {
+      return;
+    }
+    const extensionWindow = ExtensionManager.getOpenedExtensionWindow(
+      foundEntity.userExtension.id
+    );
+    if (extensionWindow) {
+      sendWindow(extensionWindow, 'user-extension-item-updated', {
+        item: event.entity as ExtensionItem<unknown>,
+      });
+    }
+    if (foundEntity.widget?.id) {
+      const widgetWindow = WidgetManager.openedWidgetWindows.get(
+        foundEntity.widget.id
+      );
+      if (widgetWindow) {
+        // sendWindow(widgetWindow, 'user-extension-item-updated', {
+        //   data: event.entity.data,
+        // });
+      }
+    }
   }
 
   public async beforeRemove(

@@ -10,3 +10,12 @@ export type ExtensionItem<T> = {
   id: string;
   data: T;
 };
+
+export type Widget<T> = {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  extensionItem: ExtensionItem<T>;
+};

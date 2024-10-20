@@ -3,7 +3,7 @@ import path from 'path';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
 import { ExtensionMeta } from './extension';
-import { handleIpc } from './ipc-main';
+import { handleIpc, sendWindow } from './ipc-main';
 import { DatabaseManager } from './database/database';
 import { debounce } from 'lodash';
 import {
@@ -30,7 +30,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
   }
 
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  const widgetWindow = new BrowserWindow({
     width: params.width || 800,
     height: params.height || 600,
     x: params.x || 100,
@@ -43,16 +43,16 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
   });
 
   if (isDevelopment) {
-    mainWindow.loadURL(
+    widgetWindow.loadURL(
       `http://localhost:${ExtensionMeta[params.extensionId].devPort}/widget.html`
     );
   } else {
-    mainWindow.loadURL(`${APP_SCHEME}://${params.extensionId}/widget.html`);
+    widgetWindow.loadURL(`${APP_SCHEME}://${params.extensionId}/widget.html`);
   }
 
   const onMoveOrResize = debounce(async () => {
-    const [width, height] = mainWindow.getSize();
-    const [x, y] = mainWindow.getPosition();
+    const [width, height] = widgetWindow.getSize();
+    const [x, y] = widgetWindow.getPosition();
     const manager = DatabaseManager.get().manager;
     const widget = await manager.findOne(UserWidget, {
       where: { id: params.widgetId },
@@ -69,9 +69,9 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
 
   const onClose = async () => {
     openedWidgetWindows.delete(params.widgetId);
-    mainWindow.removeListener('move', onMoveOrResize);
-    mainWindow.removeListener('resize', onMoveOrResize);
-    mainWindow.removeListener('closed', onClose);
+    widgetWindow.removeListener('move', onMoveOrResize);
+    widgetWindow.removeListener('resize', onMoveOrResize);
+    widgetWindow.removeListener('closed', onClose);
     const manager = DatabaseManager.get().manager;
     const entity = await manager.findOne(UserWidget, {
       where: { id: params.widgetId },
@@ -81,12 +81,12 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     }
     await manager.remove(entity);
   };
+  widgetWindow.on('move', onMoveOrResize);
+  widgetWindow.on('resize', onMoveOrResize);
+  widgetWindow.on('closed', onClose);
 
-  mainWindow.on('move', onMoveOrResize);
-  mainWindow.on('resize', onMoveOrResize);
-  mainWindow.on('closed', onClose);
-
-  openedWidgetWindows.set(params.widgetId, mainWindow);
+  openedWidgetWindows.set(params.widgetId, widgetWindow);
+  return widgetWindow;
 };
 
 function parsePosition(
@@ -106,6 +106,40 @@ function parsePosition(
   }
   return pos;
 }
+
+handleIpc('get-widget-info', async (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  if (!window) {
+    throw new Error('Window not found');
+  }
+  const widgetId = Array.from(openedWidgetWindows.entries()).find(
+    ([, win]) => win === window
+  )?.[0];
+  if (!widgetId) {
+    throw new Error('Widget not found');
+  }
+  const manager = DatabaseManager.get().manager;
+  const widget = await manager.findOne(UserWidget, {
+    where: { id: widgetId },
+    relations: {
+      userExtensionItem: true,
+    },
+  });
+  if (!widget) {
+    throw new Error('Entity not found');
+  }
+  return {
+    id: widget.id,
+    x: widget.x,
+    y: widget.y,
+    width: widget.width,
+    height: widget.height,
+    extensionItem: {
+      id: widget.userExtensionItem.id,
+      data: widget.userExtensionItem.data,
+    },
+  };
+});
 
 handleIpc('create-widget', async (event, args) => {
   const manager = DatabaseManager.get().manager;

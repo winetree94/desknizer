@@ -1,5 +1,5 @@
 import type { IpcRenderer } from 'electron';
-import type { Extension, ExtensionItem } from './entity';
+import type { Extension, ExtensionItem, Widget } from './entity';
 
 export type IpcRendererEvent = Parameters<Parameters<IpcRenderer['on']>[1]>[0];
 
@@ -82,6 +82,17 @@ export interface HandleCreateUserExtensionItemRequest<R> {
 
 export type HandleCreateUserExtensionItemResponse<R> = ExtensionItem<R>;
 
+export interface HandleUpdateUserExtensionItemRequest<R> {
+  id: string;
+  data: R;
+}
+
+export type HandleUpdateUserExtensionItemResponse<R> = ExtensionItem<R>;
+
+export type HandleWidgetInfoRequest = void;
+
+export type HandleWidgetInfoResponse<T> = Widget<T>;
+
 export interface HandleCreateWidgetRequest {
   id: string;
   pos?: {
@@ -94,13 +105,7 @@ export interface HandleCreateWidgetRequest {
   };
 }
 
-export interface HandleCreateWidgetResponse {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+export type HandleCreateWidgetResponse = Omit<Widget, 'extensionItem'>;
 
 export type HandleUpdateWidgetRequest = HandleCreateWidgetRequest;
 
@@ -137,6 +142,14 @@ export interface IpcRendererInvokeEventListeners {
     event: 'create-user-extension-item',
     args: HandleCreateUserExtensionItemRequest<R>
   ): Promise<HandleCreateUserExtensionItemResponse<R>>;
+  <R>(
+    event: 'update-user-extension-item',
+    args: HandleUpdateUserExtensionItemRequest<R>
+  ): Promise<HandleUpdateUserExtensionItemResponse<R>>;
+  <T>(
+    event: 'get-widget-info',
+    args: void
+  ): Promise<HandleWidgetInfoResponse<T>>;
   (
     event: 'create-widget',
     args: HandleCreateWidgetRequest

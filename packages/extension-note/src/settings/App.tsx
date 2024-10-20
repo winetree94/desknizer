@@ -20,10 +20,7 @@ import {
   OnUserExtensionItemInsertedArgs,
   OnUserExtensionItemUpdatedArgs,
 } from '@note/types/ipc';
-
-interface NoteData {
-  content: string;
-}
+import { NoteData } from '../shared/types.ts';
 
 export function App() {
   const [contents, setContents] = useState<ExtensionItem<NoteData>[]>([]);

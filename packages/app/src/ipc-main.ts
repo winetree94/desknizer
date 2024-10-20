@@ -19,6 +19,10 @@ import {
   OnUserExtensionItemInsertedArgs,
   OnUserExtensionItemUpdatedArgs,
   OnUserExtensionItemDeletedArgs,
+  HandleWidgetInfoRequest,
+  HandleWidgetInfoResponse,
+  HandleUpdateUserExtensionItemRequest,
+  HandleUpdateUserExtensionItemResponse,
 } from '@note/types/ipc';
 
 interface IpcHandlers {
@@ -47,6 +51,11 @@ interface IpcHandlers {
     response: HandleGetUserExtensionItemsResponse<unknown>;
   };
 
+  'update-user-extension-item': {
+    request: HandleUpdateUserExtensionItemRequest<object>;
+    response: HandleUpdateUserExtensionItemResponse<object>;
+  };
+
   'delete-user-extension-item': {
     request: HandleDeleteUserExtensionItemRequest;
     response: HandleDeleteUserExtensionItemResponse;
@@ -59,6 +68,11 @@ interface IpcHandlers {
   'create-user-extension-item': {
     request: HandleCreateUserExtensionItemRequest<unknown>;
     response: HandleCreateUserExtensionItemResponse<unknown>;
+  };
+
+  'get-widget-info': {
+    request: HandleWidgetInfoRequest;
+    response: HandleWidgetInfoResponse<unknown>;
   };
 
   /**

@@ -145,6 +145,21 @@ handleIpc('create-user-extension-item', async (event, opts) => {
   return item;
 });
 
+handleIpc('update-user-extension-item', async (event, opts) => {
+  const manager = DatabaseManager.get().manager;
+  const found = await manager.findOne(UserExtensionItem, {
+    where: {
+      id: opts.id,
+    },
+  });
+  if (!found) {
+    throw new Error('Extension item not found');
+  }
+  found.data = opts.data;
+  await manager.save(found);
+  return found;
+});
+
 handleIpc('open-extension-settings', (event, opts: { extensionId: string }) => {
   ExtensionManager.openExtensionSettings(opts.extensionId);
 });

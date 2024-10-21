@@ -19,6 +19,10 @@ export type OnUserExtensionItemDeletedArgs = {
   id: string;
 };
 
+export type OnWindowFocusChangeArgs = {
+  focused: boolean;
+};
+
 export type OnContextMenuClickedArgs<T> = {
   id: string;
   data: T;
@@ -33,6 +37,10 @@ export interface IpcRendererOnEventListeners {
       event: IpcRendererEvent,
       data: OnContextMenuClickedArgs<T>
     ) => void
+  ): UnSubscribe;
+  (
+    event: 'on-window-focus-change',
+    listener: (event: IpcRendererEvent, data: OnWindowFocusChangeArgs) => void
   ): UnSubscribe;
   <R>(
     event: 'user-extension-item-inserted',

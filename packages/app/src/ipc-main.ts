@@ -23,7 +23,7 @@ import {
   HandleWidgetInfoResponse,
   HandleUpdateUserExtensionItemRequest,
   HandleUpdateUserExtensionItemResponse,
-  ShowContextMenuRequest,
+  ShowContextMenuRequest, OnWindowFocusChangeArgs,
 } from '@note/types/ipc';
 
 interface IpcHandlers {
@@ -125,6 +125,9 @@ interface SendEventListeners {
   };
   'user-extension-item-deleted': {
     request: OnUserExtensionItemDeletedArgs;
+  };
+  'on-window-focus-change': {
+    request: OnWindowFocusChangeArgs;
   };
 }
 

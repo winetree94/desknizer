@@ -72,6 +72,8 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     widgetWindow.removeListener('move', onMoveOrResize);
     widgetWindow.removeListener('resize', onMoveOrResize);
     widgetWindow.removeListener('closed', onClose);
+    widgetWindow.removeListener('focus', onFocus);
+    widgetWindow.removeListener('blur', onBlur);
     const manager = DatabaseManager.get().manager;
     const entity = await manager.findOne(UserWidget, {
       where: { id: params.widgetId },
@@ -81,9 +83,24 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     }
     await manager.remove(entity);
   };
+
+  const onFocus = () => {
+    sendWindow(widgetWindow, 'on-window-focus-change', {
+      focused: true,
+    });
+  };
+
+  const onBlur = () => {
+    sendWindow(widgetWindow, 'on-window-focus-change', {
+      focused: false,
+    });
+  };
+
   widgetWindow.on('move', onMoveOrResize);
   widgetWindow.on('resize', onMoveOrResize);
   widgetWindow.on('closed', onClose);
+  widgetWindow.on('focus', onFocus);
+  widgetWindow.on('blur', onBlur);
 
   openedWidgetWindows.set(params.widgetId, widgetWindow);
   return widgetWindow;

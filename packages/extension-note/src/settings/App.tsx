@@ -11,7 +11,7 @@ import {
   Card,
   Input,
 } from '@mantine/core';
-import { RiCloseFill, RiAddFill, RiMoreFill, RiLockLine } from 'react-icons/ri';
+import { RiCloseFill, RiAddFill, RiMoreFill } from 'react-icons/ri';
 import Meta from '../../package.json';
 import { ExtensionItem } from '@note/types/entity';
 import {
@@ -170,9 +170,6 @@ export function App() {
         </Flex>
         <Flex className='drag-region' flex='1 1 auto'></Flex>
         <Flex>
-          <ActionIcon variant='subtle' aria-label='Settings'>
-            <RiLockLine style={{ width: '60%', height: '60%' }} />
-          </ActionIcon>
           <ActionIcon
             variant='subtle'
             aria-label='Settings'

@@ -1,6 +1,5 @@
 import '@mantine/tiptap/styles.css';
 import { ActionIcon, Flex, ScrollArea } from '@mantine/core';
-import { IoClose, IoAdd } from 'react-icons/io5';
 import Meta from '../../package.json';
 import { NoteData } from '../shared/types.ts';
 import { useWidget } from '@note/ui/providers/WidgetProvider.tsx';
@@ -15,10 +14,23 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import { debounce } from 'lodash';
+import { RiCloseFill, RiAddFill } from 'react-icons/ri';
+import { motion } from 'framer-motion';
 
 export function App() {
   const widget = useWidget<NoteData>();
   const [value, setValue] = useState(widget.extensionItem.data.content);
+  const [windowFocused, setWindowFocused] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = window.electron.ipcRenderer.on(
+      'on-window-focus-change',
+      (_, data) => {
+        setWindowFocused(data.focused);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   const debouncedUpdate = useCallback(
     debounce((editor: Editor) => {
@@ -54,7 +66,21 @@ export function App() {
 
   return (
     <Flex direction='column' flex='1 1 auto'>
-      <Flex>
+      <motion.div
+        className='flex overflow-hidden'
+        animate={windowFocused ? 'open' : 'closed'}
+        transition={{
+          ease: 'linear',
+        }}
+        variants={{
+          open: {
+            y: 0,
+          },
+          closed: {
+            y: -30,
+          },
+        }}
+      >
         <Flex>
           <ActionIcon
             variant='subtle'
@@ -74,7 +100,7 @@ export function App() {
               });
             }}
           >
-            <IoAdd style={{ width: '70%', height: '70%' }} />
+            <RiAddFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
         </Flex>
         <Flex className='drag-region' flex='1 1 auto'></Flex>
@@ -84,10 +110,10 @@ export function App() {
             aria-label='Settings'
             onClick={() => window.close()}
           >
-            <IoClose style={{ width: '70%', height: '70%' }} />
+            <RiCloseFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
         </Flex>
-      </Flex>
+      </motion.div>
       <ScrollArea>
         <RichTextEditor editor={editor} style={{ border: 'none' }}>
           <RichTextEditor.Content />

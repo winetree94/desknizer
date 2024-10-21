@@ -1,4 +1,3 @@
-import { MantineProvider } from '@mantine/core';
 import {
   createBrowserRouter,
   Navigate,
@@ -6,6 +5,7 @@ import {
 } from 'react-router-dom';
 import { IndexPage } from './pages/Index';
 import { Suspense } from 'react';
+import { NUIMantineProvider } from '@note/ui/providers/Mantine';
 
 const router = createBrowserRouter([
   {
@@ -20,10 +20,10 @@ const router = createBrowserRouter([
 
 export function SettingsProvider() {
   return (
-    <MantineProvider>
+    <NUIMantineProvider>
       <Suspense fallback={null}>
         <RouterProvider router={router} />
       </Suspense>
-    </MantineProvider>
+    </NUIMantineProvider>
   );
 }

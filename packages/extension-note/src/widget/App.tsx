@@ -1,14 +1,47 @@
 import '@mantine/tiptap/styles.css';
-import { ActionIcon, Flex, Textarea } from '@mantine/core';
+import { ActionIcon, Flex, ScrollArea } from '@mantine/core';
 import { IoClose, IoAdd } from 'react-icons/io5';
 import Meta from '../../package.json';
 import { NoteData } from '../shared/types.ts';
 import { useWidget } from '@note/ui/providers/WidgetProvider.tsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import '@mantine/tiptap/styles.css';
+import { RichTextEditor, Link } from '@mantine/tiptap';
+import { useEditor, Editor } from '@tiptap/react';
+import Highlight from '@tiptap/extension-highlight';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Superscript from '@tiptap/extension-superscript';
+import SubScript from '@tiptap/extension-subscript';
+import { debounce } from 'lodash';
 
 export function App() {
   const widget = useWidget<NoteData>();
-  const [value, setValue] = useState(widget?.extensionItem.data.content);
+  const [value, setValue] = useState(widget.extensionItem.data.content);
+
+  const debouncedUpdate = useCallback(
+    debounce((editor: Editor) => {
+      setValue(editor.getHTML());
+    }, 500),
+    []
+  );
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      Superscript,
+      SubScript,
+      Highlight,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      debouncedUpdate(editor);
+    },
+  });
 
   useEffect(() => {
     window.electron.ipcRenderer.invoke('update-user-extension-item', {
@@ -25,7 +58,6 @@ export function App() {
         <Flex>
           <ActionIcon
             variant='subtle'
-            color='black'
             aria-label='Settings'
             onClick={async () => {
               const entity = await window.electron.ipcRenderer.invoke<NoteData>(
@@ -49,7 +81,6 @@ export function App() {
         <Flex>
           <ActionIcon
             variant='subtle'
-            color='black'
             aria-label='Settings'
             onClick={() => window.close()}
           >
@@ -57,13 +88,11 @@ export function App() {
           </ActionIcon>
         </Flex>
       </Flex>
-      <Textarea
-        label='Input label'
-        description='Input description'
-        placeholder='Input placeholder'
-        value={value}
-        onChange={(event) => setValue(event.currentTarget.value)}
-      />
+      <ScrollArea>
+        <RichTextEditor editor={editor} style={{ border: 'none' }}>
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      </ScrollArea>
     </Flex>
   );
 }

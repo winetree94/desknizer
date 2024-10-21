@@ -23,6 +23,7 @@ import {
   HandleWidgetInfoResponse,
   HandleUpdateUserExtensionItemRequest,
   HandleUpdateUserExtensionItemResponse,
+  ShowContextMenuRequest,
 } from '@note/types/ipc';
 
 interface IpcHandlers {
@@ -135,13 +136,16 @@ export function sendWindow<K extends keyof SendEventListeners>(
   window.webContents.send(channel, args);
 }
 
+interface OnEventListeners {
+  'show-context-menu': {
+    request: ShowContextMenuRequest<unknown>;
+  };
+}
+
 // 각 채널에 맞는 핸들러 등록 함수
-export function onIpc<K extends keyof SendEventListeners>(
+export function onIpc<K extends keyof OnEventListeners>(
   channel: K,
-  listener: (
-    event: IpcMainEvent,
-    args: SendEventListeners[K]['request']
-  ) => void
+  listener: (event: IpcMainEvent, args: OnEventListeners[K]['request']) => void
 ) {
   ipcMain.on(channel, listener);
 }

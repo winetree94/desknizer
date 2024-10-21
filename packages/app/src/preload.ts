@@ -17,6 +17,7 @@ const apis: PreloadApis['electron'] = {
   ipcRenderer: {
     on: on,
     invoke: ipcRenderer.invoke,
+    send: ipcRenderer.send,
   },
 };
 

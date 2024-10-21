@@ -1,6 +1,7 @@
 import {
   IpcRendererInvokeEventListeners,
   IpcRendererOnEventListeners,
+  IpcSendEventListeners,
 } from './ipc';
 
 export interface PreloadApis {
@@ -8,6 +9,7 @@ export interface PreloadApis {
     ipcRenderer: {
       on: IpcRendererOnEventListeners;
       invoke: IpcRendererInvokeEventListeners;
+      send: IpcSendEventListeners;
     };
   };
 }

@@ -8,6 +8,7 @@ import {
 import { UserWidget } from '../entities/UserExtension';
 import { WidgetManager } from '../../widget';
 import { sendWindow } from '../../ipc-main';
+import {BrowserWindow} from "electron";
 
 @EventSubscriber()
 export class UserWidgetSubscriber<T extends object, I extends object>
@@ -40,7 +41,8 @@ export class UserWidgetSubscriber<T extends object, I extends object>
       return;
     }
     const window = WidgetManager.openedWidgetWindows.get(event.entity.id);
-    if (!window) {
+    const focusedWindow = BrowserWindow.getFocusedWindow();
+    if (!window || window === focusedWindow) {
       return;
     }
     window.setBounds({

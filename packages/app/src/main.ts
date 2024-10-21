@@ -6,6 +6,7 @@ import { TrayManager } from './tray';
 import { DatabaseManager } from './database/database';
 import { ExtensionManager } from './extension';
 import { WidgetManager } from './widget';
+import './context-menu';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line @typescript-eslint/no-require-imports

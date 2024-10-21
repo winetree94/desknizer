@@ -1,4 +1,8 @@
-import type { IpcRenderer } from 'electron';
+import type {
+  IpcRenderer,
+  MenuItemConstructorOptions,
+  MenuItem,
+} from 'electron';
 import type { Extension, ExtensionItem, Widget } from './entity';
 
 export type IpcRendererEvent = Parameters<Parameters<IpcRenderer['on']>[1]>[0];
@@ -15,9 +19,21 @@ export type OnUserExtensionItemDeletedArgs = {
   id: string;
 };
 
+export type OnContextMenuClickedArgs<T> = {
+  id: string;
+  data: T;
+};
+
 export type UnSubscribe = () => void;
 
 export interface IpcRendererOnEventListeners {
+  <T>(
+    event: 'context-menu-clicked',
+    listener: (
+      event: IpcRendererEvent,
+      data: OnContextMenuClickedArgs<T>
+    ) => void
+  ): UnSubscribe;
   <R>(
     event: 'user-extension-item-inserted',
     listener: (
@@ -163,4 +179,16 @@ export interface IpcRendererInvokeEventListeners {
     args: HandleDeleteWidgetRequest
   ): Promise<HandleDeleteWidgetResponse>;
   (event: 'get-extensions'): Promise<HandleGetExtensionsResponse>;
+}
+
+export interface ShowContextMenuRequest<T> {
+  items: Array<
+    MenuItemConstructorOptions & {
+      data: T;
+    }
+  >;
+}
+
+export interface IpcSendEventListeners {
+  <T>(event: 'show-context-menu', args: ShowContextMenuRequest<T>);
 }

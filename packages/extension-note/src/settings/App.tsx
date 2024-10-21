@@ -11,11 +11,12 @@ import {
   Card,
   Input,
 } from '@mantine/core';
-import { IoClose, IoAdd, IoTrashOutline } from 'react-icons/io5';
+import { RiCloseFill, RiAddFill, RiMoreFill, RiLockLine } from 'react-icons/ri';
 import Meta from '../../package.json';
 import { ExtensionItem } from '@note/types/entity';
 import {
   IpcRendererEvent,
+  OnContextMenuClickedArgs,
   OnUserExtensionItemDeletedArgs,
   OnUserExtensionItemInsertedArgs,
   OnUserExtensionItemUpdatedArgs,
@@ -26,6 +27,24 @@ export function App() {
   const [contents, setContents] = useState<ExtensionItem<NoteData>[]>([]);
 
   useEffect(() => {
+    const contextMenuClicked = (
+      _: IpcRendererEvent,
+      data: OnContextMenuClickedArgs<{ id: string }>
+    ) => {
+      switch (data.id) {
+        case 'open-widget':
+          window.electron.ipcRenderer.invoke('create-widget', {
+            id: data.data.id,
+          });
+          break;
+        case 'delete':
+          window.electron.ipcRenderer.invoke('delete-user-extension-item', {
+            id: data.data.id,
+          });
+          break;
+      }
+    };
+
     const onUserExtensionItemInserted = (
       _: IpcRendererEvent,
       data: OnUserExtensionItemInsertedArgs<NoteData>
@@ -67,6 +86,11 @@ export function App() {
       setContents((prev) => prev.filter((item) => item.id !== data.id));
     };
 
+    const contextMenuClickedUnsubscribe = window.electron.ipcRenderer.on(
+      'context-menu-clicked',
+      contextMenuClicked
+    );
+
     const insertUnsubscribe = window.electron.ipcRenderer.on(
       'user-extension-item-inserted',
       onUserExtensionItemInserted
@@ -93,6 +117,7 @@ export function App() {
     init().then();
 
     return () => {
+      contextMenuClickedUnsubscribe();
       insertUnsubscribe();
       updateUnsubscribe();
       deletedUnsubscribe();
@@ -124,7 +149,6 @@ export function App() {
         <Flex>
           <ActionIcon
             variant='subtle'
-            color='black'
             aria-label='Settings'
             onClick={async () => {
               const entity = await window.electron.ipcRenderer.invoke<NoteData>(
@@ -141,18 +165,20 @@ export function App() {
               });
             }}
           >
-            <IoAdd style={{ width: '70%', height: '70%' }} />
+            <RiAddFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
         </Flex>
         <Flex className='drag-region' flex='1 1 auto'></Flex>
         <Flex>
+          <ActionIcon variant='subtle' aria-label='Settings'>
+            <RiLockLine style={{ width: '60%', height: '60%' }} />
+          </ActionIcon>
           <ActionIcon
             variant='subtle'
-            color='black'
             aria-label='Settings'
             onClick={() => window.close()}
           >
-            <IoClose style={{ width: '70%', height: '70%' }} />
+            <RiCloseFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
         </Flex>
       </Flex>
@@ -168,32 +194,49 @@ export function App() {
               <Card
                 key={content.id}
                 shadow='sm'
-                padding='lg'
+                padding='sm'
                 radius='md'
                 withBorder
-                onClick={async () => {
+                onDoubleClick={async () => {
                   await window.electron.ipcRenderer.invoke('create-widget', {
                     id: content.id,
                   });
                 }}
+                style={{ userSelect: 'none' }}
               >
+                <Flex justify='flex-end'>
+                  <ActionIcon
+                    variant='subtle'
+                    aria-label='Settings'
+                    size='sm'
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      window.electron.ipcRenderer.send<{
+                        id: string;
+                      }>('show-context-menu', {
+                        items: [
+                          {
+                            id: 'open-widget',
+                            label: 'Open',
+                            data: {
+                              id: content.id,
+                            },
+                          },
+                          {
+                            id: 'delete',
+                            label: 'Delete',
+                            data: {
+                              id: content.id,
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                  >
+                    <RiMoreFill style={{ width: '70%', height: '70%' }} />
+                  </ActionIcon>
+                </Flex>
                 <Text size='sm'>{content.data.content}</Text>
-                <ActionIcon
-                  variant='subtle'
-                  color='black'
-                  aria-label='Settings'
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await window.electron.ipcRenderer.invoke(
-                      'delete-user-extension-item',
-                      {
-                        id: content.id,
-                      }
-                    );
-                  }}
-                >
-                  <IoTrashOutline style={{ width: '70%', height: '70%' }} />
-                </ActionIcon>
               </Card>
             ))}
           </Flex>

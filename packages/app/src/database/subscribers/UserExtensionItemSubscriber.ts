@@ -11,6 +11,7 @@ import { sendWindow } from '../../ipc-main';
 import { ExtensionItem } from '@note/types/entity';
 import { DatabaseManager } from '../database';
 import { WidgetManager } from '../../widget';
+import {BrowserWindow} from "electron";
 
 @EventSubscriber()
 export class UserExtensionItemSubscriber<T extends object, I extends object>
@@ -62,7 +63,8 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
       const widgetWindow = WidgetManager.openedWidgetWindows.get(
         foundEntity.widget.id
       );
-      if (widgetWindow) {
+      const focusedWindow = BrowserWindow.getFocusedWindow();
+      if (widgetWindow && widgetWindow !== focusedWindow) {
         // sendWindow(widgetWindow, 'user-extension-item-updated', {
         //   data: event.entity.data,
         // });

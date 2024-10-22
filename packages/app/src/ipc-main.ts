@@ -23,7 +23,9 @@ import {
   HandleWidgetInfoResponse,
   HandleUpdateUserExtensionItemRequest,
   HandleUpdateUserExtensionItemResponse,
-  ShowContextMenuRequest, OnWindowFocusChangeArgs,
+  ShowContextMenuRequest,
+  OnWindowFocusChangeArgs,
+  HandleIsWindowFocusedResponse,
 } from '@note/types/ipc';
 
 interface IpcHandlers {
@@ -102,6 +104,11 @@ interface IpcHandlers {
   'open-extension-settings': {
     request: HandleOpenExtensionSettingsRequest;
     response: void;
+  };
+
+  'is-window-focused': {
+    request: void;
+    response: HandleIsWindowFocusedResponse;
   };
 }
 

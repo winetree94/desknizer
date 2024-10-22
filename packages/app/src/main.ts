@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+import './context-menu';
+import './windows';
 import { app } from 'electron';
 import { SettingsWindowManager } from './settings';
 import { ProtocolManager } from './protocol';
@@ -6,7 +8,6 @@ import { TrayManager } from './tray';
 import { DatabaseManager } from './database/database';
 import { ExtensionManager } from './extension';
 import { WidgetManager } from './widget';
-import './context-menu';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -37,11 +38,8 @@ app.whenReady().then(async () => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-// app.on('window-all-closed', () => {
-//   if (process.platform !== 'darwin') {
-//     // app.quit();
-//   }
-// });
+// prevent auto quitting
+app.on('window-all-closed', () => {});
 
 // app.on('activate', () => {
 //   // On OS X it's common to re-create a window in the app when the

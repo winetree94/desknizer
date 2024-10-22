@@ -1,3 +1,4 @@
+import { whenNotQuitting } from './windows';
 import { type Size, screen, BrowserWindow } from 'electron';
 import path from 'path';
 import { isDevelopment } from './utils';
@@ -67,7 +68,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     await manager.save(widget);
   }, 100);
 
-  const onClose = async () => {
+  const onClose = whenNotQuitting(async () => {
     openedWidgetWindows.delete(params.widgetId);
     widgetWindow.removeListener('move', onMoveOrResize);
     widgetWindow.removeListener('resize', onMoveOrResize);
@@ -82,7 +83,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
       return;
     }
     await manager.remove(entity);
-  };
+  });
 
   const onFocus = () => {
     sendWindow(widgetWindow, 'on-window-focus-change', {

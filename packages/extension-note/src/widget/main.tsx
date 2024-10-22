@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
 import './index.css';
 import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';

@@ -142,6 +142,10 @@ export interface HandleDeleteWidgetResponse {
 
 export type HandleGetExtensionsResponse = Extension<unknown>[];
 
+export type HandleIsWindowFocusedResponse = {
+  focused: boolean;
+};
+
 export interface IpcRendererInvokeEventListeners {
   (
     event: 'open-extension-settings',
@@ -184,6 +188,10 @@ export interface IpcRendererInvokeEventListeners {
     args: HandleDeleteWidgetRequest
   ): Promise<HandleDeleteWidgetResponse>;
   (event: 'get-extensions'): Promise<HandleGetExtensionsResponse>;
+  (
+    event: 'is-window-focused',
+    args: void
+  ): Promise<HandleIsWindowFocusedResponse>;
 }
 
 export interface SerializableMenuItemConstructorOptions

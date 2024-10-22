@@ -1,6 +1,5 @@
 import { whenNotQuitting } from './windows';
 import { type Size, screen, BrowserWindow } from 'electron';
-import path from 'path';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
 import { ExtensionMeta } from './extension';
@@ -38,7 +37,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     y: params.y || 100,
     frame: false,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
     },
   });
@@ -49,7 +48,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     );
   } else {
     widgetWindow.loadURL(
-      `${APP_SCHEME}://${params.extensionId}/widget.html`
+      `${APP_SCHEME}://extensions.${params.extensionId}/widget.html`
     );
   }
 

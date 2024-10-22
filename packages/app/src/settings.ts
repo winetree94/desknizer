@@ -1,5 +1,7 @@
 import { BrowserWindow } from 'electron';
-import path from 'path';
+import { APP_SCHEME } from './protocol';
+import SettingsMeta from '@note/settings/package.json';
+import { isDevelopment } from './utils';
 
 let settingsWindow: BrowserWindow | null = null;
 
@@ -15,27 +17,19 @@ const open = () => {
     width: 800,
     height: 600,
     frame: false,
-    // transparent: true,
-    // fullscreen: true,
-    // skipTaskbar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
     },
   });
 
-  // and load the index.html of the app.
-  if (SETTINGS_WINDOW_VITE_DEV_SERVER_URL) {
-    settingsWindow.loadURL(SETTINGS_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    settingsWindow.loadFile(
-      path.join(__dirname, `../renderer/${SETTINGS_WINDOW_VITE_NAME}`)
+  if (isDevelopment) {
+    settingsWindow.loadURL(
+      `http://localhost:${SettingsMeta.extensionConfigs.devPort}/index.html`
     );
+  } else {
+    settingsWindow.loadURL(`${APP_SCHEME}://renderers.settings/index.html`);
   }
-
-  settingsWindow.on('close', () => {
-    settingsWindow = null;
-  });
 
   return settingsWindow;
 };

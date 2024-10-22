@@ -2,6 +2,7 @@ import { app, Menu, Tray } from 'electron';
 import path from 'path';
 import { SettingsWindowManager } from './settings';
 import { ExtensionManager, ExtensionMeta } from './extension';
+import { getPublicPath } from './utils';
 
 let tray: Tray | null = null;
 
@@ -10,7 +11,7 @@ const load = async () => {
     return tray;
   }
   await app.whenReady();
-  tray = new Tray(path.join(__dirname, './icon.png'));
+  tray = new Tray(path.join(getPublicPath(), './icon.png'));
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Settings',

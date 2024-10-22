@@ -1,6 +1,5 @@
 import NoteMeta from '@note-extension/note/package.json';
 import { BrowserWindow } from 'electron';
-import path from 'path';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
 import { DatabaseManager } from './database/database';
@@ -44,7 +43,7 @@ const openExtensionSettings = (extensionId: string) => {
     height: 400,
     frame: false,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
     },
   });
@@ -54,7 +53,7 @@ const openExtensionSettings = (extensionId: string) => {
       `http://localhost:${ExtensionMeta[extensionId].devPort}/index.html`
     );
   } else {
-    window.loadURL(`${APP_SCHEME}://${extensionId}/index.html`);
+    window.loadURL(`${APP_SCHEME}://extensions.${extensionId}/index.html`);
   }
 
   window.on('close', () => {

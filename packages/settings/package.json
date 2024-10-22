@@ -1,0 +1,35 @@
+{
+  "name": "@note/settings",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build --emptyOutDir",
+    "build:watch": "vite build --watch",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@note/lint": "workspace:*",
+    "@note/types": "workspace:*",
+    "@note/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  },
+  "extensionConfigs": {
+    "name": "Settings",
+    "description": "Settings",
+    "uuid": "538b7193-f300-4a87-afc7-da956bf64a30",
+    "devPort": 6168,
+    "widget": {
+      "minHeight": 400,
+      "minWidth": 400
+    },
+    "settings": {
+      "minHeight": 400,
+      "minWidth": 400
+    }
+  }
+}

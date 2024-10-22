@@ -1,10 +1,9 @@
 import { app, net, protocol } from 'electron';
 import path from 'path';
 import { pathToFileURL } from 'url';
+import { getPublicPath } from './utils';
 
 export const APP_SCHEME = 'app';
-
-let initialized = false;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -23,32 +22,30 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 const load = async () => {
-  if (initialized) {
-    return;
-  }
   await app.whenReady();
   protocol.handle(APP_SCHEME, (req) => {
-    const { host, pathname } = new URL(req.url);
-    if (pathname === '/') {
-      const indexPath = path.resolve(
-        __dirname,
-        'extensions',
-        host,
-        'index.html'
-      );
-      console.log(indexPath);
-      return net.fetch(pathToFileURL(indexPath).toString());
-    }
-
-    const pathToServe = path.resolve(
-      __dirname,
-      'extensions',
-      host,
-      pathname.slice(1)
+    const { host: rawHost, pathname } = new URL(req.url);
+    const [basePath, uuid] = rawHost.split('.');
+    const hasFileExtension = pathname.includes('.');
+    const indexPath = path.resolve(
+      getPublicPath(),
+      basePath,
+      uuid,
+      'index.html'
     );
-    return net.fetch(pathToFileURL(pathToServe).toString());
+    if (pathname === '/' || pathname === '' || pathname === '/index.html') {
+      return net.fetch(pathToFileURL(indexPath).toString());
+    } else if (hasFileExtension) {
+      const pathToServe = path.resolve(
+        getPublicPath(),
+        basePath,
+        uuid,
+        pathname.slice(1)
+      );
+      return net.fetch(pathToFileURL(pathToServe).toString());
+    }
+    return net.fetch(pathToFileURL(indexPath).toString());
   });
-  initialized = true;
 };
 
 export const ProtocolManager = {

@@ -1,23 +1,23 @@
 {
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "target": "ESNext",
     "module": "commonjs",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,
     "sourceMap": true,
-    "jsx": "react-jsx",
     "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "jsx": "react-jsx",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "outDir": "dist",
-    "strictPropertyInitialization": false,
-    "moduleResolution": "node",
-    "resolveJsonModule": true
+    "strictPropertyInitialization": false
   },
   "include": [
     "src",

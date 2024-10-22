@@ -36,6 +36,7 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
     x: params.x || 100,
     y: params.y || 100,
     frame: false,
+    show: false,
     webPreferences: {
       preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -51,6 +52,8 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
       `${APP_SCHEME}://extensions.${params.extensionId}/widget.html`
     );
   }
+
+  widgetWindow.once('ready-to-show', () => widgetWindow.show());
 
   const onMoveOrResize = debounce(async () => {
     const [width, height] = widgetWindow.getSize();

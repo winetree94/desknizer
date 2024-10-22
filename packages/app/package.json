@@ -10,7 +10,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "build": "electron-forge package",
+    "build": "electron-forge make",
     "lint": "eslint --ext .ts,.tsx .",
     "rebuild": "electron-rebuild -f -w better-sqlite3 typeorm reflect-metadata",
     "postinstall": "electron-builder install-app-deps"

@@ -17,6 +17,7 @@ const open = () => {
     width: 800,
     height: 600,
     frame: false,
+    show: false,
     webPreferences: {
       preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -30,6 +31,8 @@ const open = () => {
   } else {
     settingsWindow.loadURL(`${APP_SCHEME}://renderers.settings/index.html`);
   }
+
+  settingsWindow.once('ready-to-show', () => settingsWindow?.show());
 
   return settingsWindow;
 };

@@ -42,6 +42,7 @@ const openExtensionSettings = (extensionId: string) => {
     width: 400,
     height: 400,
     frame: false,
+    show: false,
     webPreferences: {
       preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
@@ -55,6 +56,8 @@ const openExtensionSettings = (extensionId: string) => {
   } else {
     window.loadURL(`${APP_SCHEME}://extensions.${extensionId}/index.html`);
   }
+
+  window.once('ready-to-show', () => window.show());
 
   window.on('close', () => {
     delete openedExtensionSettings[extensionId];

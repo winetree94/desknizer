@@ -6,7 +6,7 @@ import { APP_SCHEME } from './protocol';
 import { ExtensionMeta } from './extension';
 import { handleIpc, sendWindow } from './ipc-main';
 import { DatabaseManager } from './database/database';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import {
   UserExtensionItem,
   UserWidget,
@@ -48,7 +48,9 @@ const createWidgetWindow = (params: OpenExtensionWidgetParams) => {
       `http://localhost:${ExtensionMeta[params.extensionId].devPort}/widget.html`
     );
   } else {
-    widgetWindow.loadURL(`${APP_SCHEME}://${params.extensionId}/widget.html`);
+    widgetWindow.loadURL(
+      `${APP_SCHEME}://${params.extensionId}/widget.html`
+    );
   }
 
   const onMoveOrResize = debounce(async () => {

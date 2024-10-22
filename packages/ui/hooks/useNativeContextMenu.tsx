@@ -4,7 +4,7 @@ import {
   OnContextMenuClickedArgs,
   SerializableMenuItemConstructorOptions,
 } from '@note/types/ipc';
-import { uniqueId } from 'lodash';
+import { uniqueId } from 'lodash-es';
 
 export interface ContextMenuItem<T>
   extends Omit<SerializableMenuItemConstructorOptions, 'submenu'> {

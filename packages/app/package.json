@@ -27,7 +27,6 @@
     "@electron/rebuild": "^3.7.0",
     "@note-extension/note": "workspace:*",
     "@note/lint": "workspace:*",
-    "@note/server": "workspace:*",
     "@note/types": "workspace:*",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@swc/core": "^1.7.35",
@@ -36,6 +35,7 @@
     "@vitejs/plugin-react": "^4.3.2",
     "electron": "32.1.2",
     "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.5.3",
     "vite": "^5.0.12"
@@ -48,9 +48,8 @@
   "license": "MIT",
   "dependencies": {
     "@note/ui": "workspace:*",
-    "better-sqlite3": "^11.3.0",
+    "better-sqlite3": "^11.5.0",
     "electron-squirrel-startup": "^1.0.1",
-    "electron-vite": "^2.3.0",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   }

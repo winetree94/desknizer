@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "lerna run start --scope @note/app --scope '@note-extension/*' --parallel --stream",
-    "rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd -f -m ./node_modules/better-sqlite3",
+    "rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd -f -w ./node_modules/better-sqlite3",
     "start:app": "yarn workspace @note/app start",
     "start:server": "yarn workspace @note/server dev",
     "extension:dev": "lerna run dev --scope '@note-extension/*' --parallel"

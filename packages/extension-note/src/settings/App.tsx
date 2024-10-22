@@ -112,7 +112,14 @@ export function App() {
                     <RiMoreFill style={{ width: '70%', height: '70%' }} />
                   </ActionIcon>
                 </Flex>
-                <Text size='sm'>{content.data.content}</Text>
+                <Flex>
+                  <div
+                    className='max-h-32 overflow-hidden'
+                    dangerouslySetInnerHTML={{
+                      __html: content.data.content,
+                    }}
+                  ></div>
+                </Flex>
               </Card>
             ))}
           </Flex>

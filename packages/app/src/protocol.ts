@@ -29,14 +29,23 @@ const load = async () => {
   await app.whenReady();
   protocol.handle(APP_SCHEME, (req) => {
     const { host, pathname } = new URL(req.url);
-
     if (pathname === '/') {
-      const indexPath = path.resolve(__dirname, host, 'index.html');
+      const indexPath = path.resolve(
+        __dirname,
+        'extensions',
+        host,
+        'index.html'
+      );
       console.log(indexPath);
       return net.fetch(pathToFileURL(indexPath).toString());
     }
 
-    const pathToServe = path.resolve(__dirname, host, pathname.slice(1));
+    const pathToServe = path.resolve(
+      __dirname,
+      'extensions',
+      host,
+      pathname.slice(1)
+    );
     return net.fetch(pathToFileURL(pathToServe).toString());
   });
   initialized = true;

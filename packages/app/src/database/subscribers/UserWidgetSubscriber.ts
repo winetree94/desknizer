@@ -7,8 +7,7 @@ import {
 } from 'typeorm';
 import { UserWidget } from '../entities/UserExtension';
 import { WidgetManager } from '../../widget';
-import { sendWindow } from '../../ipc-main';
-import {BrowserWindow} from "electron";
+import { BrowserWindow } from 'electron';
 
 @EventSubscriber()
 export class UserWidgetSubscriber<T extends object, I extends object>

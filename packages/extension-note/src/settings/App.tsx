@@ -1,6 +1,3 @@
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
-import { useState, useEffect } from 'react';
 import '@mantine/tiptap/styles.css';
 import {
   Divider,
@@ -13,135 +10,36 @@ import {
 } from '@mantine/core';
 import { RiCloseFill, RiAddFill, RiMoreFill } from 'react-icons/ri';
 import Meta from '../../package.json';
-import { ExtensionItem } from '@note/types/entity';
-import {
-  IpcRendererEvent,
-  OnContextMenuClickedArgs,
-  OnUserExtensionItemDeletedArgs,
-  OnUserExtensionItemInsertedArgs,
-  OnUserExtensionItemUpdatedArgs,
-} from '@note/types/ipc';
 import { NoteData } from '../shared/types.ts';
+import { useExtensionItems } from '@note/ui/hooks/useExtensionItems';
+import { useNativeContextMenu } from '@note/ui/hooks/useNativeContextMenu';
 
 export function App() {
-  const [contents, setContents] = useState<ExtensionItem<NoteData>[]>([]);
-
-  useEffect(() => {
-    const contextMenuClicked = (
-      _: IpcRendererEvent,
-      data: OnContextMenuClickedArgs<{ id: string }>
-    ) => {
-      switch (data.id) {
-        case 'open-widget':
+  const contents = useExtensionItems<NoteData>({
+    extensionId: Meta.extensionConfigs.uuid,
+  });
+  const { open } = useNativeContextMenu<{ id: string }>({
+    items: [
+      {
+        id: 'open-widget',
+        label: 'Open',
+        click: (data) => {
           window.electron.ipcRenderer.invoke('create-widget', {
-            id: data.data.id,
+            id: data.id,
           });
-          break;
-        case 'delete':
-          window.electron.ipcRenderer.invoke('delete-user-extension-item', {
-            id: data.data.id,
-          });
-          break;
-      }
-    };
-
-    const onUserExtensionItemInserted = (
-      _: IpcRendererEvent,
-      data: OnUserExtensionItemInsertedArgs<NoteData>
-    ) => {
-      setContents((prev) => [
-        {
-          id: data.item.id,
-          data: {
-            content: data.item.data.content,
-          },
         },
-        ...prev,
-      ]);
-    };
-
-    const onUserExtensionItemUpdated = (
-      _: IpcRendererEvent,
-      data: OnUserExtensionItemUpdatedArgs<NoteData>
-    ) => {
-      setContents((prev) => {
-        return prev.map((item) => {
-          if (item.id === data.item.id) {
-            return {
-              id: data.item.id,
-              data: {
-                content: data.item.data.content,
-              },
-            };
-          }
-          return item;
-        });
-      });
-    };
-
-    const onUserExtensionItemDeleted = (
-      _: IpcRendererEvent,
-      data: OnUserExtensionItemDeletedArgs
-    ) => {
-      setContents((prev) => prev.filter((item) => item.id !== data.id));
-    };
-
-    const contextMenuClickedUnsubscribe = window.electron.ipcRenderer.on(
-      'context-menu-clicked',
-      contextMenuClicked
-    );
-
-    const insertUnsubscribe = window.electron.ipcRenderer.on(
-      'user-extension-item-inserted',
-      onUserExtensionItemInserted
-    );
-    const updateUnsubscribe = window.electron.ipcRenderer.on(
-      'user-extension-item-updated',
-      onUserExtensionItemUpdated
-    );
-    const deletedUnsubscribe = window.electron.ipcRenderer.on(
-      'user-extension-item-deleted',
-      onUserExtensionItemDeleted
-    );
-
-    const init = async () => {
-      const extensionItems = await window.electron.ipcRenderer.invoke<NoteData>(
-        'get-user-extension-items',
-        {
-          extensionId: Meta.extensionConfigs.uuid,
-        }
-      );
-      setContents(extensionItems.reverse());
-    };
-
-    init().then();
-
-    return () => {
-      contextMenuClickedUnsubscribe();
-      insertUnsubscribe();
-      updateUnsubscribe();
-      deletedUnsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const getter = async () => {
-      // const extensionInfo = await window.electron.ipcRenderer.invoke<NoteMeta>(
-      //   'get-user-extension-info',
-      //   {
-      //     extensionId: Meta.extensionConfigs.uuid,
-      //   }
-      // );
-      const extensionItems = await window.electron.ipcRenderer.invoke<NoteData>(
-        'get-user-extension-items',
-        {
-          extensionId: Meta.extensionConfigs.uuid,
-        }
-      );
-      setContents(() => extensionItems);
-    };
-    getter().then();
-  }, []);
+      },
+      {
+        id: 'delete',
+        label: 'Delete',
+        click: (data) => {
+          window.electron.ipcRenderer.invoke('delete-user-extension-item', {
+            id: data.id,
+          });
+        },
+      },
+    ],
+  });
 
   return (
     <Flex direction='column' flex='1 1 auto'>
@@ -208,26 +106,7 @@ export function App() {
                     size='sm'
                     onClick={async (e) => {
                       e.stopPropagation();
-                      window.electron.ipcRenderer.send<{
-                        id: string;
-                      }>('show-context-menu', {
-                        items: [
-                          {
-                            id: 'open-widget',
-                            label: 'Open',
-                            data: {
-                              id: content.id,
-                            },
-                          },
-                          {
-                            id: 'delete',
-                            label: 'Delete',
-                            data: {
-                              id: content.id,
-                            },
-                          },
-                        ],
-                      });
+                      open({ id: content.id });
                     }}
                   >
                     <RiMoreFill style={{ width: '70%', height: '70%' }} />

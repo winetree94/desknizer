@@ -13,9 +13,18 @@ const on: IpcRendererOnEventListeners = (event: any, listener: any) => {
   return () => ipcRenderer.removeListener(event, subscriber);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const once: IpcRendererOnEventListeners = (event: any, listener: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const subscriber = (...args: any[]) => listener(...args);
+  ipcRenderer.once(event, subscriber);
+  return () => ipcRenderer.removeListener(event, subscriber);
+};
+
 const apis: PreloadApis['electron'] = {
   ipcRenderer: {
     on: on,
+    once: once,
     invoke: ipcRenderer.invoke,
     send: ipcRenderer.send,
   },

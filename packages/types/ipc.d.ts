@@ -1,8 +1,4 @@
-import type {
-  IpcRenderer,
-  MenuItemConstructorOptions,
-  MenuItem,
-} from 'electron';
+import type { IpcRenderer, MenuItemConstructorOptions } from 'electron';
 import type { Extension, ExtensionItem, Widget } from './entity';
 
 export type IpcRendererEvent = Parameters<Parameters<IpcRenderer['on']>[1]>[0];
@@ -25,6 +21,7 @@ export type OnWindowFocusChangeArgs = {
 
 export type OnContextMenuClickedArgs<T> = {
   id: string;
+  menuId: string;
   data: T;
 };
 
@@ -189,12 +186,15 @@ export interface IpcRendererInvokeEventListeners {
   (event: 'get-extensions'): Promise<HandleGetExtensionsResponse>;
 }
 
+export interface SerializableMenuItemConstructorOptions
+  extends Omit<MenuItemConstructorOptions, 'submenu' | 'click'> {
+  submenu?: SerializableMenuItemConstructorOptions[];
+}
+
 export interface ShowContextMenuRequest<T> {
-  items: Array<
-    MenuItemConstructorOptions & {
-      data: T;
-    }
-  >;
+  id: string;
+  items: SerializableMenuItemConstructorOptions[];
+  data: T;
 }
 
 export interface IpcSendEventListeners {

@@ -4,7 +4,8 @@ import {
   virtualColor,
   ActionIcon,
 } from '@mantine/core';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { useMediaQuery } from '@mantine/hooks';
 
 const theme = createTheme({
   colors: {
@@ -24,8 +25,16 @@ const theme = createTheme({
 });
 
 export function NUIMantineProvider(props: PropsWithChildren) {
+  // Big hack to make it work for now
+  const [dark, setDark] = useState(false);
+  const preferredColorScheme = useMediaQuery('(prefers-color-scheme: dark)');
+
+  useEffect(() => {
+    setDark(!!preferredColorScheme);
+  }, [preferredColorScheme]);
+
   return (
-    <MantineProvider theme={theme} defaultColorScheme='dark'>
+    <MantineProvider theme={theme} forceColorScheme={dark ? 'dark' : 'light'}>
       {props.children}
     </MantineProvider>
   );

@@ -1,24 +1,25 @@
 import { onIpc } from './ipc-main';
-import { Menu } from 'electron';
+import { Menu, MenuItemConstructorOptions } from 'electron';
 
 onIpc('show-context-menu', async (event, args) => {
-  const menu = Menu.buildFromTemplate(
-    args.items.map((item) => {
-      if ('id' in item) {
-        return {
-          id: item.id,
-          label: item.label,
-          click: () => {
-            event.reply('context-menu-clicked', {
-              id: item.id,
-              data: item.data,
-            });
-          },
-        };
-      } else {
-        return item;
+  const templates = args.items.map<MenuItemConstructorOptions>(
+    function Mapper(item) {
+      if (item.submenu) {
+        item.submenu = item.submenu.map(Mapper);
       }
-    })
+      return {
+        ...item,
+        click: (menu) => {
+          event.reply('context-menu-clicked', {
+            id: item.id,
+            menuId: menu.id,
+            data: args.data,
+          });
+        },
+      };
+    }
   );
+  console.log(templates);
+  const menu = Menu.buildFromTemplate(templates);
   menu.popup();
 });

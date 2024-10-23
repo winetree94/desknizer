@@ -8,6 +8,7 @@ import { TrayManager } from './tray';
 import { DatabaseManager } from './database/database';
 import { ExtensionManager } from './extension';
 import { WidgetManager } from './widget';
+import { Config } from './database/entities/UserExtension';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -24,6 +25,26 @@ app.whenReady().then(async () => {
     SettingsWindowManager.load(),
     ProtocolManager.load(),
   ]);
+
+  const manager = DatabaseManager.get().manager;
+  const configs = await manager.findOne<
+    Config<{
+      firstLaunch: boolean;
+    }>
+  >(Config, {
+    where: {
+      key: 'configs',
+    },
+  });
+  if (!configs || !configs.value.firstLaunch) {
+    await manager.insert(Config, {
+      key: 'configs',
+      value: {
+        firstLaunch: true,
+      },
+    });
+    SettingsWindowManager.open();
+  }
 });
 
 // This method will be called when Electron has finished

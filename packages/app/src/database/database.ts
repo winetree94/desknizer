@@ -2,6 +2,7 @@ import { app } from 'electron';
 import path from 'node:path';
 import { DataSource } from 'typeorm';
 import {
+  Config,
   UserExtension,
   UserExtensionItem,
   UserWidget,
@@ -18,7 +19,7 @@ const db = new DataSource({
   database: databasePath,
   synchronize: true,
   logging: true,
-  entities: [UserExtension, UserExtensionItem, UserWidget],
+  entities: [Config, UserExtension, UserExtensionItem, UserWidget],
   subscribers: [
     UserExtensionSubscriber,
     UserExtensionItemSubscriber,

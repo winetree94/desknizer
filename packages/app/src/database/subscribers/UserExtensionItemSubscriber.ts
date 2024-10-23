@@ -11,7 +11,7 @@ import { sendWindow } from '../../ipc-main';
 import { ExtensionItem } from '@desknizer/types/entity';
 import { DatabaseManager } from '../database';
 import { WidgetManager } from '../../widget';
-import {BrowserWindow} from "electron";
+import { BrowserWindow } from 'electron';
 
 @EventSubscriber()
 export class UserExtensionItemSubscriber<T extends object, I extends object>
@@ -27,6 +27,9 @@ export class UserExtensionItemSubscriber<T extends object, I extends object>
     const targetWindow = ExtensionManager.getOpenedExtensionWindow(
       event.entity.userExtension.id
     );
+    if (!targetWindow) {
+      return;
+    }
     sendWindow(targetWindow, 'user-extension-item-inserted', {
       item: event.entity,
     });

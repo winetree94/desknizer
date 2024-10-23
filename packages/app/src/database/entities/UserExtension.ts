@@ -11,6 +11,21 @@ import {
 } from 'typeorm';
 
 @Entity()
+export class Config<T> {
+  @PrimaryColumn()
+  key: string;
+
+  @Column({
+    type: 'text',
+    transformer: {
+      to: (value: T) => JSON.stringify(value),
+      from: (value: string) => JSON.parse(value) as T,
+    },
+  })
+  value: T;
+}
+
+@Entity()
 export class UserExtension<META extends object, DATA extends object> {
   @PrimaryColumn()
   id: string;

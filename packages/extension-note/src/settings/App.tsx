@@ -8,11 +8,12 @@ import {
   Card,
   Input,
 } from '@mantine/core';
-import { RiCloseFill, RiAddFill, RiMoreFill } from 'react-icons/ri';
+import { RiAddFill, RiMoreFill } from 'react-icons/ri';
 import Meta from '../../package.json';
 import { NoteData } from '../shared/types.ts';
 import { useExtensionItems } from '@note/ui/hooks/useExtensionItems';
 import { useNativeContextMenu } from '@note/ui/hooks/useNativeContextMenu';
+import { Toolbar } from '@note/ui/components/Toolbar.tsx';
 
 export function App() {
   const contents = useExtensionItems<NoteData>({
@@ -43,8 +44,8 @@ export function App() {
 
   return (
     <Flex direction='column' flex='1 1 auto'>
-      <Flex>
-        <Flex>
+      <Toolbar
+        leftContents={
           <ActionIcon
             variant='subtle'
             aria-label='Settings'
@@ -65,18 +66,8 @@ export function App() {
           >
             <RiAddFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
-        </Flex>
-        <Flex className='drag-region' flex='1 1 auto'></Flex>
-        <Flex>
-          <ActionIcon
-            variant='subtle'
-            aria-label='Settings'
-            onClick={() => window.close()}
-          >
-            <RiCloseFill style={{ width: '70%', height: '70%' }} />
-          </ActionIcon>
-        </Flex>
-      </Flex>
+        }
+      />
       <Flex flex={1} direction='column' style={{ overflow: 'hidden' }}>
         <Flex pb='xs' pl='xs' pr='xs' direction='column'>
           <Text size='xl'>Notes</Text>

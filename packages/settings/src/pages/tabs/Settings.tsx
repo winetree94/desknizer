@@ -6,9 +6,6 @@ export function Settings() {
       <Box p='md'>
         <Checkbox defaultChecked label='Auto Start' />
       </Box>
-      <Box p='md'>
-        <Checkbox defaultChecked label='Automatic Update' />
-      </Box>
     </ScrollArea>
   );
 }

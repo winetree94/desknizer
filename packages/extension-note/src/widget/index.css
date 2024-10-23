@@ -19,4 +19,9 @@ body {
 
 .drag-region {
   -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
+
+.no-drag-region {
+  -webkit-app-region: no-drag;
 }

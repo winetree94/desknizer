@@ -10,9 +10,9 @@ import { useEditor, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import { debounce } from 'lodash-es';
-import { RiCloseFill, RiAddFill, RiMoreFill } from 'react-icons/ri';
-import { motion } from 'framer-motion';
+import { RiAddFill, RiMoreFill } from 'react-icons/ri';
 import { useWindowFocused } from '@note/ui/hooks/useWindowFocused';
+import { Toolbar } from '@note/ui/components/Toolbar.tsx';
 
 export function App() {
   const widget = useWidget<NoteData>();
@@ -56,22 +56,9 @@ export function App() {
           <div>Hello World!</div>
         </div>
       </Drawer>
-      <motion.div
-        className='flex overflow-hidden flex-shrink-0'
-        animate={windowFocused ? 'open' : 'closed'}
-        transition={{
-          ease: 'linear',
-        }}
-        variants={{
-          open: {
-            y: 0,
-          },
-          closed: {
-            y: -30,
-          },
-        }}
-      >
-        <Flex>
+      <Toolbar
+        autoHide={true}
+        leftContents={
           <ActionIcon
             variant='subtle'
             aria-label='Settings'
@@ -92,9 +79,8 @@ export function App() {
           >
             <RiAddFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
-        </Flex>
-        <Flex className='drag-region' flex='1 1 auto'></Flex>
-        <Flex>
+        }
+        rightContents={
           <ActionIcon
             variant='subtle'
             aria-label='Settings'
@@ -102,15 +88,8 @@ export function App() {
           >
             <RiMoreFill style={{ width: '70%', height: '70%' }} />
           </ActionIcon>
-          <ActionIcon
-            variant='subtle'
-            aria-label='Settings'
-            onClick={() => window.close()}
-          >
-            <RiCloseFill style={{ width: '70%', height: '70%' }} />
-          </ActionIcon>
-        </Flex>
-      </motion.div>
+        }
+      />
       <RichTextEditor
         editor={editor}
         className='border-none flex flex-col justify-items-end flex-1 overflow-hidden'

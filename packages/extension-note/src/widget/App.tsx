@@ -13,6 +13,7 @@ import { debounce } from 'lodash-es';
 import { RiAddFill, RiMoreFill } from 'react-icons/ri';
 import { useWindowFocused } from '@desknizer/ui/hooks/useWindowFocused';
 import { Toolbar } from '@desknizer/ui/components/Toolbar.tsx';
+import { motion } from 'framer-motion';
 
 export function App() {
   const widget = useWidget<NoteData>();
@@ -97,19 +98,30 @@ export function App() {
         <ScrollArea className='flex-1' scrollbars='y'>
           <RichTextEditor.Content />
         </ScrollArea>
-        <RichTextEditor.Toolbar
-          className={`flex-shrink-0 border-none p-2 ${windowFocused ? 'visible' : 'hidden'}`}
+        <motion.div
+          variants={{
+            hidden: {
+              opacity: 0,
+            },
+            visible: {
+              opacity: 1,
+            },
+          }}
+          animate={windowFocused ? 'visible' : 'hidden'}
+          transition={{ delay: 0.1 }}
         >
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-            <RichTextEditor.Strikethrough />
-            <RichTextEditor.ClearFormatting />
-            <RichTextEditor.Code />
-            <RichTextEditor.Hr />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
+          <RichTextEditor.Toolbar className={`flex-shrink-0 border-none p-2`}>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Code />
+              <RichTextEditor.Hr />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+        </motion.div>
       </RichTextEditor>
     </Flex>
   );

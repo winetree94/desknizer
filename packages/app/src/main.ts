@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import './context-menu';
 import './windows';
-import { app } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 import { SettingsWindowManager } from './settings';
 import { ProtocolManager } from './protocol';
 import { TrayManager } from './tray';
@@ -17,6 +17,43 @@ if (require('electron-squirrel-startup')) {
 }
 
 app.whenReady().then(async () => {
+  const showKeyRegistration = globalShortcut.register(
+    'CommandOrControl+Alt+Shift+X',
+    async () => {
+      const windows = BrowserWindow.getAllWindows();
+      windows.forEach((window) => {
+        window.setSkipTaskbar(true);
+        window.hide();
+      });
+      windows.forEach((window) => {
+        window.show();
+      });
+      windows.forEach((window) => {
+        window.setSkipTaskbar(false);
+        window.focus();
+      });
+    }
+  );
+  if (!showKeyRegistration) {
+    console.error('registration failed');
+  }
+
+  const hideKeyRegistration = globalShortcut.register(
+    'CommandOrControl+Alt+Shift+C',
+    async () => {
+      const windows = BrowserWindow.getAllWindows();
+      windows.forEach((window) => {
+        window.hide();
+        window.setSkipTaskbar(false);
+        // window.show();
+        // window.setAlwaysOnTop(false);
+      });
+    }
+  );
+  if (!hideKeyRegistration) {
+    console.error('registration failed');
+  }
+
   await Promise.all([
     DatabaseManager.load().then(() =>
       Promise.all([ExtensionManager.load(), WidgetManager.load()])
@@ -45,6 +82,10 @@ app.whenReady().then(async () => {
     });
     SettingsWindowManager.open();
   }
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
 });
 
 // This method will be called when Electron has finished

@@ -11,9 +11,9 @@ import {
 import { RiAddFill, RiMoreFill } from 'react-icons/ri';
 import Meta from '../../package.json';
 import { NoteData } from '../shared/types.ts';
-import { useExtensionItems } from '@note/ui/hooks/useExtensionItems';
-import { useNativeContextMenu } from '@note/ui/hooks/useNativeContextMenu';
-import { Toolbar } from '@note/ui/components/Toolbar.tsx';
+import { useExtensionItems } from '@desknizer/ui/hooks/useExtensionItems';
+import { useNativeContextMenu } from '@desknizer/ui/hooks/useNativeContextMenu';
+import { Toolbar } from '@desknizer/ui/components/Toolbar.tsx';
 
 export function App() {
   const contents = useExtensionItems<NoteData>({

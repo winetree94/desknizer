@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ExtensionItem } from '@note/types/entity';
+import { ExtensionItem } from '@desknizer/types/entity';
 import {
   IpcRendererEvent,
   OnUserExtensionItemDeletedArgs,
   OnUserExtensionItemInsertedArgs,
   OnUserExtensionItemUpdatedArgs,
-} from '@note/types/ipc';
+} from '@desknizer/types/ipc';
 
 export interface UseExtensionItemsProps {
   extensionId: string;

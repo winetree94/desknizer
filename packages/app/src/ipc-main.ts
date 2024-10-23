@@ -26,7 +26,7 @@ import {
   ShowContextMenuRequest,
   OnWindowFocusChangeArgs,
   HandleIsWindowFocusedResponse,
-} from '@note/types/ipc';
+} from '@desknizer/types/ipc';
 
 interface IpcHandlers {
   /**

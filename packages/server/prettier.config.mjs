@@ -1,3 +1,3 @@
-import prettierConfigs from '@note/lint/prettier.config.mjs';
+import prettierConfigs from '@desknizer/lint/prettier.config.mjs';
 
 export default prettierConfigs;

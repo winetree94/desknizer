@@ -1,9 +1,9 @@
 {
-  "name": "@note/app",
+  "name": "@desknizer/app",
   "private": true,
-  "productName": "note",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "productName": "desknizer",
+  "version": "0.0.1",
+  "description": "Desknizer description",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
@@ -16,6 +16,10 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
+    "@desknizer-extension/note": "workspace:*",
+    "@desknizer/lint": "workspace:*",
+    "@desknizer/settings": "workspace:*",
+    "@desknizer/types": "workspace:*",
     "@electron-forge/cli": "^7.5.0",
     "@electron-forge/maker-deb": "^7.5.0",
     "@electron-forge/maker-rpm": "^7.5.0",
@@ -27,10 +31,6 @@
     "@electron-forge/publisher-github": "^7.5.0",
     "@electron/fuses": "^1.8.0",
     "@electron/rebuild": "^3.7.0",
-    "@note-extension/note": "workspace:*",
-    "@note/lint": "workspace:*",
-    "@note/settings": "workspace:*",
-    "@note/types": "workspace:*",
     "@rollup/plugin-commonjs": "^28.0.0",
     "@swc/core": "^1.7.35",
     "@types/electron-squirrel-startup": "^1",
@@ -54,7 +54,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@note/ui": "workspace:*",
+    "@desknizer/ui": "workspace:*",
     "better-sqlite3": "^11.5.0",
     "electron-squirrel-startup": "^1.0.1",
     "reflect-metadata": "^0.2.2",

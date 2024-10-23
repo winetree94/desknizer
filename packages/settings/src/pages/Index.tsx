@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { IconMessageCircle, IconPhoto } from '@tabler/icons-react';
 import { Extensions } from './tabs/Extensions';
 import { Settings } from './tabs/Settings';
-import { Toolbar } from '@note/ui/components/Toolbar.tsx';
+import { Toolbar } from '@desknizer/ui/components/Toolbar.tsx';
 
 export function IndexPage() {
   const iconStyle = { width: rem(12), height: rem(12) };

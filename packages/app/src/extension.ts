@@ -1,4 +1,4 @@
-import NoteMeta from '@note-extension/note/package.json';
+import NoteMeta from '@desknizer-extension/note/package.json';
 import { BrowserWindow } from 'electron';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
@@ -47,6 +47,7 @@ const openExtensionSettings = (extensionId: string) => {
       preload: SETTINGS_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
     },
+    backgroundColor: '#242424',
   });
 
   if (isDevelopment) {

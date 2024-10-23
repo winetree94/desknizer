@@ -1,5 +1,5 @@
 {
-  "name": "@note/lint",
+  "name": "@desknizer/lint",
   "private": true,
   "dependencies": {
     "@eslint/js": "^9.12.0",

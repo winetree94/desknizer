@@ -2,7 +2,7 @@ import '@mantine/tiptap/styles.css';
 import { ActionIcon, Flex, ScrollArea, Drawer } from '@mantine/core';
 import Meta from '../../package.json';
 import { NoteData } from '../shared/types.ts';
-import { useWidget } from '@note/ui/providers/WidgetProvider.tsx';
+import { useWidget } from '@desknizer/ui/providers/WidgetProvider.tsx';
 import { useEffect, useState, useCallback } from 'react';
 import { RichTextEditor } from '@mantine/tiptap';
 import { useDisclosure } from '@mantine/hooks';
@@ -11,8 +11,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import { debounce } from 'lodash-es';
 import { RiAddFill, RiMoreFill } from 'react-icons/ri';
-import { useWindowFocused } from '@note/ui/hooks/useWindowFocused';
-import { Toolbar } from '@note/ui/components/Toolbar.tsx';
+import { useWindowFocused } from '@desknizer/ui/hooks/useWindowFocused';
+import { Toolbar } from '@desknizer/ui/components/Toolbar.tsx';
 
 export function App() {
   const widget = useWidget<NoteData>();

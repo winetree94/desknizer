@@ -31,7 +31,7 @@ const config: ForgeConfig = {
   },
   makers: [
     new MakerSquirrel({
-      name: 'noteapp',
+      name: 'desknizer',
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),

@@ -1,5 +1,5 @@
 {
-  "name": "@note/server",
+  "name": "@desknizer/server",
   "version": "1.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,7 +15,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@note-extension/note": "workspace:*",
+    "@desknizer-extension/note": "workspace:*",
     "@prisma/client": "^5.20.0",
     "@trpc/client": "^11.0.0-rc.569",
     "@trpc/server": "^11.0.0-rc.569",
@@ -24,7 +24,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@note/lint": "workspace:*",
+    "@desknizer/lint": "workspace:*",
     "@types/bcrypt": "^5",
     "@types/cors": "^2.8.17",
     "@types/node": "20.14.11",

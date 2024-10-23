@@ -1,4 +1,4 @@
-import baseConfigs from '@note/ui/tailwind.config.mjs';
+import baseConfigs from '@desknizer/ui/tailwind.config.mjs';
 
 /** @type {import('tailwindcss').Config} */
 export default {

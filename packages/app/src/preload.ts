@@ -2,8 +2,8 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import { contextBridge, ipcRenderer } from 'electron';
-import { PreloadApis } from '@note/types/preload';
-import { IpcRendererOnEventListeners } from '@note/types/ipc';
+import { PreloadApis } from '@desknizer/types/preload';
+import { IpcRendererOnEventListeners } from '@desknizer/types/ipc';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const on: IpcRendererOnEventListeners = (event: any, listener: any) => {

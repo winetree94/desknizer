@@ -1,13 +1,14 @@
 {
-  "name": "@note/base",
+  "name": "@desknizer/base",
   "private": true,
   "scripts": {
-    "dev": "lerna run start --scope @note/app --scope @note/settings --scope '@note-extension/*' --parallel --stream",
+    "dev": "lerna run start --scope @desknizer/app --scope @desknizer/settings --scope '@desknizer-extension/*' --parallel --stream",
     "rebuild": ".\\node_modules\\.bin\\electron-rebuild.cmd -f -w ./node_modules/better-sqlite3",
-    "build": "lerna run build --scope @note/app --scope @note/settings --scope '@note-extension/*' --stream",
-    "start:app": "yarn workspace @note/app start",
-    "start:server": "yarn workspace @note/server dev",
-    "extension:dev": "lerna run dev --scope '@note-extension/*' --parallel"
+    "build": "lerna run build --scope @desknizer/app --scope @desknizer/settings --scope '@desknizer-extension/*' --stream",
+    "publish": "lerna run build --scope @desknizer/settings --scope '@desknizer-extension/*' && lerna run publish --scope @desknizer/app",
+    "start:app": "yarn workspace @desknizer/app start",
+    "start:server": "yarn workspace @desknizer/server dev",
+    "extension:dev": "lerna run dev --scope '@desknizer-extension/*' --parallel"
   },
   "workspaces": [
     "packages/*"

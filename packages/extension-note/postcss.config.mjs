@@ -1,4 +1,4 @@
-import baseConfigs from '@note/ui/postcss.config.mjs';
+import baseConfigs from '@desknizer/ui/postcss.config.mjs';
 
 export default {
   ...baseConfigs,

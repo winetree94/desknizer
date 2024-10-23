@@ -8,7 +8,7 @@ import {
 import { UserExtensionItem } from '../entities/UserExtension';
 import { ExtensionManager } from '../../extension';
 import { sendWindow } from '../../ipc-main';
-import { ExtensionItem } from '@note/types/entity';
+import { ExtensionItem } from '@desknizer/types/entity';
 import { DatabaseManager } from '../database';
 import { WidgetManager } from '../../widget';
 import {BrowserWindow} from "electron";

@@ -3,7 +3,7 @@ import {
   IpcRendererEvent,
   OnContextMenuClickedArgs,
   SerializableMenuItemConstructorOptions,
-} from '@note/types/ipc';
+} from '@desknizer/types/ipc';
 import { uniqueId } from 'lodash-es';
 
 export interface ContextMenuItem<T>

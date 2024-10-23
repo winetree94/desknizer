@@ -1,3 +1,3 @@
-import LintConfigs from '@note/lint/eslint.config.mjs';
+import LintConfigs from '@desknizer/lint/eslint.config.mjs';
 
 export default [...LintConfigs];

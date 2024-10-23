@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { APP_SCHEME } from './protocol';
-import SettingsMeta from '@note/settings/package.json';
+import SettingsMeta from '@desknizer/settings/package.json';
 import { isDevelopment } from './utils';
 
 let settingsWindow: BrowserWindow | null = null;

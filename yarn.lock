@@ -295,6 +295,193 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@desknizer-extension/note@workspace:*, @desknizer-extension/note@workspace:packages/extension-note":
+  version: 0.0.0-use.local
+  resolution: "@desknizer-extension/note@workspace:packages/extension-note"
+  dependencies:
+    "@desknizer/lint": "workspace:*"
+    "@desknizer/types": "workspace:*"
+    "@desknizer/ui": "workspace:*"
+    typescript: "npm:^5.5.3"
+    vite: "npm:^5.4.8"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/app@workspace:packages/app":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/app@workspace:packages/app"
+  dependencies:
+    "@desknizer-extension/note": "workspace:*"
+    "@desknizer/lint": "workspace:*"
+    "@desknizer/settings": "workspace:*"
+    "@desknizer/types": "workspace:*"
+    "@desknizer/ui": "workspace:*"
+    "@electron-forge/cli": "npm:^7.5.0"
+    "@electron-forge/maker-deb": "npm:^7.5.0"
+    "@electron-forge/maker-rpm": "npm:^7.5.0"
+    "@electron-forge/maker-squirrel": "npm:^7.5.0"
+    "@electron-forge/maker-zip": "npm:^7.5.0"
+    "@electron-forge/plugin-auto-unpack-natives": "npm:^7.5.0"
+    "@electron-forge/plugin-fuses": "npm:^7.5.0"
+    "@electron-forge/plugin-webpack": "npm:^7.5.0"
+    "@electron-forge/publisher-github": "npm:^7.5.0"
+    "@electron/fuses": "npm:^1.8.0"
+    "@electron/rebuild": "npm:^3.7.0"
+    "@rollup/plugin-commonjs": "npm:^28.0.0"
+    "@swc/core": "npm:^1.7.35"
+    "@types/electron-squirrel-startup": "npm:^1"
+    "@types/node": "npm:20.14.11"
+    "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
+    better-sqlite3: "npm:^11.5.0"
+    copy-webpack-plugin: "npm:^12.0.2"
+    css-loader: "npm:^6.0.0"
+    electron: "npm:32.1.2"
+    electron-builder: "npm:^25.1.8"
+    electron-squirrel-startup: "npm:^1.0.1"
+    fork-ts-checker-webpack-plugin: "npm:^7.2.13"
+    node-loader: "npm:^2.0.0"
+    reflect-metadata: "npm:^0.2.2"
+    style-loader: "npm:^3.0.0"
+    ts-loader: "npm:^9.2.2"
+    ts-node: "npm:^10.0.0"
+    typeorm: "npm:^0.3.20"
+    typescript: "npm:^5.5.3"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/base@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/base@workspace:."
+  dependencies:
+    lerna: "npm:^8.1.8"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/lint@workspace:*, @desknizer/lint@workspace:packages/lint":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/lint@workspace:packages/lint"
+  dependencies:
+    "@eslint/js": "npm:^9.12.0"
+    "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
+    "@typescript-eslint/parser": "npm:^5.0.0"
+    eslint: "npm:^9.12.0"
+    eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-import: "npm:^2.25.0"
+    eslint-plugin-prettier: "npm:^5.2.1"
+    eslint-plugin-react: "npm:^7.37.1"
+    globals: "npm:^15.10.0"
+    prettier: "npm:^3.3.3"
+    typescript-eslint: "npm:^8.8.1"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/server@workspace:packages/server":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/server@workspace:packages/server"
+  dependencies:
+    "@desknizer-extension/note": "workspace:*"
+    "@desknizer/lint": "workspace:*"
+    "@prisma/client": "npm:^5.20.0"
+    "@trpc/client": "npm:^11.0.0-rc.569"
+    "@trpc/server": "npm:^11.0.0-rc.569"
+    "@types/bcrypt": "npm:^5"
+    "@types/cors": "npm:^2.8.17"
+    "@types/node": "npm:20.14.11"
+    bcrypt: "npm:^5.1.1"
+    cors: "npm:^2.8.5"
+    nodemon: "npm:^3.1.7"
+    prisma: "npm:^5.20.0"
+    ts-node: "npm:^10.9.2"
+    typescript: "npm:^5.5.3"
+    zod: "npm:^3.23.8"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/settings@workspace:*, @desknizer/settings@workspace:packages/settings":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/settings@workspace:packages/settings"
+  dependencies:
+    "@desknizer/lint": "workspace:*"
+    "@desknizer/types": "workspace:*"
+    "@desknizer/ui": "workspace:*"
+    typescript: "npm:^5.5.3"
+    vite: "npm:^5.4.8"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/types@workspace:*, @desknizer/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/types@workspace:packages/types"
+  dependencies:
+    electron: "npm:32.1.2"
+    typescript: "npm:^5.5.3"
+  languageName: unknown
+  linkType: soft
+
+"@desknizer/ui@workspace:*, @desknizer/ui@workspace:packages/ui":
+  version: 0.0.0-use.local
+  resolution: "@desknizer/ui@workspace:packages/ui"
+  dependencies:
+    "@desknizer/lint": "workspace:*"
+    "@desknizer/types": "workspace:*"
+    "@emotion/is-prop-valid": "npm:^1.3.1"
+    "@mantine/core": "npm:^7.13.2"
+    "@mantine/dates": "npm:^7.13.2"
+    "@mantine/form": "npm:^7.13.2"
+    "@mantine/hooks": "npm:^7.13.2"
+    "@mantine/tiptap": "npm:^7.13.2"
+    "@tabler/icons-react": "npm:^3.19.0"
+    "@tanstack/react-query": "npm:^5.59.9"
+    "@tiptap/extension-blockquote": "npm:^2.8.0"
+    "@tiptap/extension-bold": "npm:^2.8.0"
+    "@tiptap/extension-bullet-list": "npm:^2.8.0"
+    "@tiptap/extension-code": "npm:^2.8.0"
+    "@tiptap/extension-code-block": "npm:^2.8.0"
+    "@tiptap/extension-document": "npm:^2.8.0"
+    "@tiptap/extension-dropcursor": "npm:^2.8.0"
+    "@tiptap/extension-gapcursor": "npm:^2.8.0"
+    "@tiptap/extension-heading": "npm:^2.8.0"
+    "@tiptap/extension-highlight": "npm:^2.8.0"
+    "@tiptap/extension-horizontal-rule": "npm:^2.8.0"
+    "@tiptap/extension-italic": "npm:^2.8.0"
+    "@tiptap/extension-link": "npm:^2.8.0"
+    "@tiptap/extension-list-item": "npm:^2.8.0"
+    "@tiptap/extension-ordered-list": "npm:^2.8.0"
+    "@tiptap/extension-paragraph": "npm:^2.8.0"
+    "@tiptap/extension-strike": "npm:^2.8.0"
+    "@tiptap/extension-subscript": "npm:^2.8.0"
+    "@tiptap/extension-superscript": "npm:^2.8.0"
+    "@tiptap/extension-task-item": "npm:^2.8.0"
+    "@tiptap/extension-task-list": "npm:^2.8.0"
+    "@tiptap/extension-text": "npm:^2.8.0"
+    "@tiptap/extension-text-align": "npm:^2.8.0"
+    "@tiptap/extension-text-style": "npm:^2.8.0"
+    "@tiptap/extension-underline": "npm:^2.8.0"
+    "@tiptap/pm": "npm:^2.8.0"
+    "@tiptap/react": "npm:^2.8.0"
+    "@tiptap/starter-kit": "npm:^2.8.0"
+    "@types/lodash": "npm:^4.17.10"
+    "@types/lodash-es": "npm:^4"
+    "@types/react": "npm:^18.3.10"
+    "@types/react-dom": "npm:^18.3.0"
+    "@vitejs/plugin-react": "npm:^4.3.2"
+    autoprefixer: "npm:^10.4.20"
+    framer-motion: "npm:^11.11.4"
+    lodash: "npm:^4.17.21"
+    lodash-es: "npm:^4.17.21"
+    postcss: "npm:^8.4.47"
+    postcss-preset-mantine: "npm:^1.17.0"
+    postcss-simple-vars: "npm:^7.0.1"
+    react: "npm:^18.3.1"
+    react-dom: "npm:^18.3.1"
+    react-icons: "npm:^5.3.0"
+    react-router-dom: "npm:^6.26.2"
+    tailwindcss: "npm:^3.4.14"
+    typescript: "npm:^5.5.3"
+    vite: "npm:^5.4.8"
+  languageName: unknown
+  linkType: soft
+
 "@develar/schema-utils@npm:~2.6.5":
   version: 2.6.5
   resolution: "@develar/schema-utils@npm:2.6.5"
@@ -1581,193 +1768,6 @@ __metadata:
   checksum: 10c0/db9de047c3bb9b51f9335a7bb46f4fcfb6829fb628318c12115fbaf7d369bfce71c15b103d1fc3b464812d936220ee9bc1c8f762d032c9f6be9acc99249095b1
   languageName: node
   linkType: hard
-
-"@note-extension/note@workspace:*, @note-extension/note@workspace:packages/extension-note":
-  version: 0.0.0-use.local
-  resolution: "@note-extension/note@workspace:packages/extension-note"
-  dependencies:
-    "@note/lint": "workspace:*"
-    "@note/types": "workspace:*"
-    "@note/ui": "workspace:*"
-    typescript: "npm:^5.5.3"
-    vite: "npm:^5.4.8"
-  languageName: unknown
-  linkType: soft
-
-"@note/app@workspace:packages/app":
-  version: 0.0.0-use.local
-  resolution: "@note/app@workspace:packages/app"
-  dependencies:
-    "@electron-forge/cli": "npm:^7.5.0"
-    "@electron-forge/maker-deb": "npm:^7.5.0"
-    "@electron-forge/maker-rpm": "npm:^7.5.0"
-    "@electron-forge/maker-squirrel": "npm:^7.5.0"
-    "@electron-forge/maker-zip": "npm:^7.5.0"
-    "@electron-forge/plugin-auto-unpack-natives": "npm:^7.5.0"
-    "@electron-forge/plugin-fuses": "npm:^7.5.0"
-    "@electron-forge/plugin-webpack": "npm:^7.5.0"
-    "@electron-forge/publisher-github": "npm:^7.5.0"
-    "@electron/fuses": "npm:^1.8.0"
-    "@electron/rebuild": "npm:^3.7.0"
-    "@note-extension/note": "workspace:*"
-    "@note/lint": "workspace:*"
-    "@note/settings": "workspace:*"
-    "@note/types": "workspace:*"
-    "@note/ui": "workspace:*"
-    "@rollup/plugin-commonjs": "npm:^28.0.0"
-    "@swc/core": "npm:^1.7.35"
-    "@types/electron-squirrel-startup": "npm:^1"
-    "@types/node": "npm:20.14.11"
-    "@vercel/webpack-asset-relocator-loader": "npm:1.7.3"
-    better-sqlite3: "npm:^11.5.0"
-    copy-webpack-plugin: "npm:^12.0.2"
-    css-loader: "npm:^6.0.0"
-    electron: "npm:32.1.2"
-    electron-builder: "npm:^25.1.8"
-    electron-squirrel-startup: "npm:^1.0.1"
-    fork-ts-checker-webpack-plugin: "npm:^7.2.13"
-    node-loader: "npm:^2.0.0"
-    reflect-metadata: "npm:^0.2.2"
-    style-loader: "npm:^3.0.0"
-    ts-loader: "npm:^9.2.2"
-    ts-node: "npm:^10.0.0"
-    typeorm: "npm:^0.3.20"
-    typescript: "npm:^5.5.3"
-  languageName: unknown
-  linkType: soft
-
-"@note/base@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@note/base@workspace:."
-  dependencies:
-    lerna: "npm:^8.1.8"
-  languageName: unknown
-  linkType: soft
-
-"@note/lint@workspace:*, @note/lint@workspace:packages/lint":
-  version: 0.0.0-use.local
-  resolution: "@note/lint@workspace:packages/lint"
-  dependencies:
-    "@eslint/js": "npm:^9.12.0"
-    "@typescript-eslint/eslint-plugin": "npm:^5.0.0"
-    "@typescript-eslint/parser": "npm:^5.0.0"
-    eslint: "npm:^9.12.0"
-    eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-import: "npm:^2.25.0"
-    eslint-plugin-prettier: "npm:^5.2.1"
-    eslint-plugin-react: "npm:^7.37.1"
-    globals: "npm:^15.10.0"
-    prettier: "npm:^3.3.3"
-    typescript-eslint: "npm:^8.8.1"
-  languageName: unknown
-  linkType: soft
-
-"@note/server@workspace:packages/server":
-  version: 0.0.0-use.local
-  resolution: "@note/server@workspace:packages/server"
-  dependencies:
-    "@note-extension/note": "workspace:*"
-    "@note/lint": "workspace:*"
-    "@prisma/client": "npm:^5.20.0"
-    "@trpc/client": "npm:^11.0.0-rc.569"
-    "@trpc/server": "npm:^11.0.0-rc.569"
-    "@types/bcrypt": "npm:^5"
-    "@types/cors": "npm:^2.8.17"
-    "@types/node": "npm:20.14.11"
-    bcrypt: "npm:^5.1.1"
-    cors: "npm:^2.8.5"
-    nodemon: "npm:^3.1.7"
-    prisma: "npm:^5.20.0"
-    ts-node: "npm:^10.9.2"
-    typescript: "npm:^5.5.3"
-    zod: "npm:^3.23.8"
-  languageName: unknown
-  linkType: soft
-
-"@note/settings@workspace:*, @note/settings@workspace:packages/settings":
-  version: 0.0.0-use.local
-  resolution: "@note/settings@workspace:packages/settings"
-  dependencies:
-    "@note/lint": "workspace:*"
-    "@note/types": "workspace:*"
-    "@note/ui": "workspace:*"
-    typescript: "npm:^5.5.3"
-    vite: "npm:^5.4.8"
-  languageName: unknown
-  linkType: soft
-
-"@note/types@workspace:*, @note/types@workspace:packages/types":
-  version: 0.0.0-use.local
-  resolution: "@note/types@workspace:packages/types"
-  dependencies:
-    electron: "npm:32.1.2"
-    typescript: "npm:^5.5.3"
-  languageName: unknown
-  linkType: soft
-
-"@note/ui@workspace:*, @note/ui@workspace:packages/ui":
-  version: 0.0.0-use.local
-  resolution: "@note/ui@workspace:packages/ui"
-  dependencies:
-    "@emotion/is-prop-valid": "npm:^1.3.1"
-    "@mantine/core": "npm:^7.13.2"
-    "@mantine/dates": "npm:^7.13.2"
-    "@mantine/form": "npm:^7.13.2"
-    "@mantine/hooks": "npm:^7.13.2"
-    "@mantine/tiptap": "npm:^7.13.2"
-    "@note/lint": "workspace:*"
-    "@note/types": "workspace:*"
-    "@tabler/icons-react": "npm:^3.19.0"
-    "@tanstack/react-query": "npm:^5.59.9"
-    "@tiptap/extension-blockquote": "npm:^2.8.0"
-    "@tiptap/extension-bold": "npm:^2.8.0"
-    "@tiptap/extension-bullet-list": "npm:^2.8.0"
-    "@tiptap/extension-code": "npm:^2.8.0"
-    "@tiptap/extension-code-block": "npm:^2.8.0"
-    "@tiptap/extension-document": "npm:^2.8.0"
-    "@tiptap/extension-dropcursor": "npm:^2.8.0"
-    "@tiptap/extension-gapcursor": "npm:^2.8.0"
-    "@tiptap/extension-heading": "npm:^2.8.0"
-    "@tiptap/extension-highlight": "npm:^2.8.0"
-    "@tiptap/extension-horizontal-rule": "npm:^2.8.0"
-    "@tiptap/extension-italic": "npm:^2.8.0"
-    "@tiptap/extension-link": "npm:^2.8.0"
-    "@tiptap/extension-list-item": "npm:^2.8.0"
-    "@tiptap/extension-ordered-list": "npm:^2.8.0"
-    "@tiptap/extension-paragraph": "npm:^2.8.0"
-    "@tiptap/extension-strike": "npm:^2.8.0"
-    "@tiptap/extension-subscript": "npm:^2.8.0"
-    "@tiptap/extension-superscript": "npm:^2.8.0"
-    "@tiptap/extension-task-item": "npm:^2.8.0"
-    "@tiptap/extension-task-list": "npm:^2.8.0"
-    "@tiptap/extension-text": "npm:^2.8.0"
-    "@tiptap/extension-text-align": "npm:^2.8.0"
-    "@tiptap/extension-text-style": "npm:^2.8.0"
-    "@tiptap/extension-underline": "npm:^2.8.0"
-    "@tiptap/pm": "npm:^2.8.0"
-    "@tiptap/react": "npm:^2.8.0"
-    "@tiptap/starter-kit": "npm:^2.8.0"
-    "@types/lodash": "npm:^4.17.10"
-    "@types/lodash-es": "npm:^4"
-    "@types/react": "npm:^18.3.10"
-    "@types/react-dom": "npm:^18.3.0"
-    "@vitejs/plugin-react": "npm:^4.3.2"
-    autoprefixer: "npm:^10.4.20"
-    framer-motion: "npm:^11.11.4"
-    lodash: "npm:^4.17.21"
-    lodash-es: "npm:^4.17.21"
-    postcss: "npm:^8.4.47"
-    postcss-preset-mantine: "npm:^1.17.0"
-    postcss-simple-vars: "npm:^7.0.1"
-    react: "npm:^18.3.1"
-    react-dom: "npm:^18.3.1"
-    react-icons: "npm:^5.3.0"
-    react-router-dom: "npm:^6.26.2"
-    tailwindcss: "npm:^3.4.14"
-    typescript: "npm:^5.5.3"
-    vite: "npm:^5.4.8"
-  languageName: unknown
-  linkType: soft
 
 "@npmcli/agent@npm:^2.0.0":
   version: 2.2.2
@@ -15245,11 +15245,11 @@ __metadata:
 
 "typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.4.3#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.5.3#optional!builtin<compat/typescript>":
   version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
+  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=74658d"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/7c9d2e07c81226d60435939618c91ec2ff0b75fbfa106eec3430f0fcf93a584bc6c73176676f532d78c3594fe28a54b36eb40b3d75593071a7ec91301533ace7
+  checksum: 10c0/ac8307bb06bbfd08ae7137da740769b7d8c3ee5943188743bb622c621f8ad61d244767480f90fbd840277fbf152d8932aa20c33f867dea1bb5e79b187ca1a92f
   languageName: node
   linkType: hard
 

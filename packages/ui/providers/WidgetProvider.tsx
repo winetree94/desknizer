@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { Widget } from '@note/types/entity';
+import { Widget } from '@desknizer/types/entity';
 
 interface WidgetProviderContextValue<T> {
   widget: Widget<T> | null;

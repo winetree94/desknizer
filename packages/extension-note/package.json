@@ -1,5 +1,5 @@
 {
-  "name": "@note-extension/note",
+  "name": "@desknizer-extension/note",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@note/lint": "workspace:*",
-    "@note/types": "workspace:*",
-    "@note/ui": "workspace:*"
+    "@desknizer/lint": "workspace:*",
+    "@desknizer/types": "workspace:*",
+    "@desknizer/ui": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.5.3",

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import NoteMeta from '@note-extension/note/package.json';
+import NoteMeta from '@desknizer-extension/note/package.json';
 const prisma = new PrismaClient();
 
 async function main() {

@@ -1,5 +1,5 @@
 {
-  "name": "@desknizer/app",
+  "name": "desknizer",
   "private": true,
   "productName": "desknizer",
   "version": "0.0.1",
@@ -12,8 +12,7 @@
     "publish": "electron-forge publish",
     "build": "electron-forge make",
     "lint": "eslint --ext .ts,.tsx .",
-    "rebuild": "electron-rebuild -f -w better-sqlite3 typeorm reflect-metadata",
-    "postinstall": "electron-builder install-app-deps"
+    "install-app-deps": "electron-builder install-app-deps"
   },
   "devDependencies": {
     "@desknizer-extension/note": "workspace:*",
@@ -39,12 +38,10 @@
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.0.0",
     "electron": "32.1.2",
-    "electron-builder": "^25.1.8",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "node-loader": "^2.0.0",
     "style-loader": "^3.0.0",
-    "ts-loader": "^9.2.2",
-    "ts-node": "^10.0.0",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.5.3"
   },
   "keywords": [],
@@ -56,6 +53,7 @@
   "dependencies": {
     "@desknizer/ui": "workspace:*",
     "better-sqlite3": "^11.5.0",
+    "electron-builder": "^25.1.8",
     "electron-squirrel-startup": "^1.0.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"

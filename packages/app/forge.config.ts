@@ -25,17 +25,26 @@ const config: ForgeConfig = {
   ],
   packagerConfig: {
     asar: true,
+    executableName: 'desknizer',
   },
   rebuildConfig: {
     force: true,
   },
   makers: [
     new MakerSquirrel({
-      name: 'desknizer',
+      name: 'Desknizer',
     }),
     new MakerZIP({}, ['darwin']),
-    new MakerRpm({}),
-    new MakerDeb({}),
+    new MakerRpm({
+      options: {
+        name: 'Desknizer',
+      },
+    }),
+    new MakerDeb({
+      options: {
+        name: 'Desknizer',
+      },
+    }),
   ],
   plugins: [
     new AutoUnpackNativesPlugin({}),

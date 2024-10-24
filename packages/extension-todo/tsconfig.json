@@ -1,0 +1,7 @@
+{
+  "extends": "@desknizer/ui/tsconfig.json",
+  "include": [
+    "src",
+    "../types/window.d.ts"
+  ]
+}

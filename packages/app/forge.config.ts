@@ -10,6 +10,7 @@ import AutoUnpackNativesPlugin from '@electron-forge/plugin-auto-unpack-natives'
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
+import MakerDMG from '@electron-forge/maker-dmg';
 const config: ForgeConfig = {
   publishers: [
     {
@@ -31,6 +32,10 @@ const config: ForgeConfig = {
     force: true,
   },
   makers: [
+    new MakerDMG({
+      name: 'Desknizer',
+      appPath: './out/desknizer-darwin-arm64/desknizer.app',
+    }),
     new MakerSquirrel({
       name: 'Desknizer',
     }),

@@ -1,0 +1,27 @@
+@layer tailwind {
+  @tailwind base;
+}
+@tailwind components;
+@tailwind utilities;
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+  height: 100%;
+}
+
+.drag-region {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
+
+.no-drag-region {
+  -webkit-app-region: no-drag;
+}

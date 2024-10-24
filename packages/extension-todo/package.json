@@ -1,0 +1,35 @@
+{
+  "name": "@desknizer-extension/todo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build --emptyOutDir",
+    "build:watch": "vite build --watch",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@desknizer/lint": "workspace:*",
+    "@desknizer/types": "workspace:*",
+    "@desknizer/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vite": "^5.4.8"
+  },
+  "extensionConfigs": {
+    "name": "Todo",
+    "description": "Simple todo",
+    "uuid": "99BD2A4E-671B-4744-820B-76801A634484",
+    "devPort": 6172,
+    "widget": {
+      "minHeight": 400,
+      "minWidth": 400
+    },
+    "settings": {
+      "minHeight": 400,
+      "minWidth": 400
+    }
+  }
+}

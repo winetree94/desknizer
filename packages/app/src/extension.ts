@@ -1,4 +1,5 @@
 import NoteMeta from '@desknizer-extension/note/package.json';
+import TodoeMeta from '@desknizer-extension/todo/package.json';
 import { BrowserWindow } from 'electron';
 import { isDevelopment } from './utils';
 import { APP_SCHEME } from './protocol';
@@ -23,6 +24,12 @@ export const ExtensionMeta: {
     name: NoteMeta.extensionConfigs.name,
     description: NoteMeta.extensionConfigs.description,
     devPort: NoteMeta.extensionConfigs.devPort,
+  },
+  [TodoeMeta.extensionConfigs.uuid]: {
+    id: TodoeMeta.extensionConfigs.uuid,
+    name: TodoeMeta.extensionConfigs.name,
+    description: TodoeMeta.extensionConfigs.description,
+    devPort: TodoeMeta.extensionConfigs.devPort,
   },
 } as const;
 

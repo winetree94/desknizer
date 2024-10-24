@@ -1,11 +1,16 @@
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { APP_SCHEME } from './protocol';
 import SettingsMeta from '@desknizer/settings/package.json';
 import { isDevelopment } from './utils';
+import { handleIpc, onIpc } from './ipc-main';
 
 let settingsWindow: BrowserWindow | null = null;
 
-const open = () => {
+export interface OpenSettingsWindowOptions {
+  path?: string;
+}
+
+const open = (options: OpenSettingsWindowOptions) => {
   // Create the browser window.
 
   if (settingsWindow) {
@@ -26,16 +31,28 @@ const open = () => {
 
   if (isDevelopment) {
     settingsWindow.loadURL(
-      `http://localhost:${SettingsMeta.extensionConfigs.devPort}/index.html`
+      `http://localhost:${SettingsMeta.extensionConfigs.devPort}${options.path || ''}`
     );
   } else {
-    settingsWindow.loadURL(`${APP_SCHEME}://renderers.settings/index.html`);
+    settingsWindow.loadURL(
+      `${APP_SCHEME}://renderers.settings${options.path || ''}`
+    );
   }
 
   settingsWindow.once('ready-to-show', () => settingsWindow?.show());
 
   return settingsWindow;
 };
+
+handleIpc('get-is-login-item', async () => {
+  return { isLoginItem: app.getLoginItemSettings().openAtLogin };
+});
+
+onIpc('set-is-login-item', async (event, args) => {
+  app.setLoginItemSettings({
+    openAtLogin: args.isLoginItem,
+  });
+});
 
 const close = () => {
   settingsWindow?.close();

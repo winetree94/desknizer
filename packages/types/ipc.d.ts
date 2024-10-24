@@ -140,6 +140,10 @@ export interface HandleDeleteWidgetResponse {
   id: string;
 }
 
+export interface HandleGetIsLoginItemRequest {
+  isLoginItem: boolean;
+}
+
 export type HandleGetExtensionsResponse = Extension<unknown>[];
 
 export type HandleIsWindowFocusedResponse = {
@@ -192,6 +196,10 @@ export interface IpcRendererInvokeEventListeners {
     event: 'is-window-focused',
     args: void
   ): Promise<HandleIsWindowFocusedResponse>;
+  (
+    event: 'get-is-login-item',
+    args: void
+  ): Promise<HandleGetIsLoginItemRequest>;
 }
 
 export interface SerializableMenuItemConstructorOptions
@@ -199,12 +207,17 @@ export interface SerializableMenuItemConstructorOptions
   submenu?: SerializableMenuItemConstructorOptions[];
 }
 
-export interface ShowContextMenuRequest<T> {
+export interface IpcSendShowContextMenuRequest<T> {
   id: string;
   items: SerializableMenuItemConstructorOptions[];
   data: T;
 }
 
+export interface IpcSendSetLoginItemRequest {
+  isLoginItem: boolean;
+}
+
 export interface IpcSendEventListeners {
-  <T>(event: 'show-context-menu', args: ShowContextMenuRequest<T>);
+  <T>(event: 'show-context-menu', args: IpcSendShowContextMenuRequest<T>);
+  (event: 'set-is-login-item', args: IpcSendSetLoginItemRequest);
 }

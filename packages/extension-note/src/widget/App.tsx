@@ -95,7 +95,11 @@ export function App() {
         editor={editor}
         className='border-none flex flex-col justify-items-end flex-1 overflow-hidden'
       >
-        <ScrollArea className='flex-1' scrollbars='y'>
+        <ScrollArea
+          className='flex-1 cursor-text'
+          scrollbars='y'
+          onClick={() => editor?.commands.focus()}
+        >
           <RichTextEditor.Content />
         </ScrollArea>
         <motion.div

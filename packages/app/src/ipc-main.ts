@@ -23,9 +23,11 @@ import {
   HandleWidgetInfoResponse,
   HandleUpdateUserExtensionItemRequest,
   HandleUpdateUserExtensionItemResponse,
-  ShowContextMenuRequest,
+  IpcSendShowContextMenuRequest,
   OnWindowFocusChangeArgs,
   HandleIsWindowFocusedResponse,
+  HandleGetIsLoginItemRequest,
+  IpcSendSetLoginItemRequest,
 } from '@desknizer/types/ipc';
 
 interface IpcHandlers {
@@ -110,6 +112,11 @@ interface IpcHandlers {
     request: void;
     response: HandleIsWindowFocusedResponse;
   };
+
+  'get-is-login-item': {
+    request: void;
+    response: HandleGetIsLoginItemRequest;
+  };
 }
 
 // 각 채널에 맞는 핸들러 등록 함수
@@ -148,7 +155,10 @@ export function sendWindow<K extends keyof SendEventListeners>(
 
 interface OnEventListeners {
   'show-context-menu': {
-    request: ShowContextMenuRequest<unknown>;
+    request: IpcSendShowContextMenuRequest<unknown>;
+  };
+  'set-is-login-item': {
+    request: IpcSendSetLoginItemRequest;
   };
 }
 

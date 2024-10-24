@@ -17,7 +17,9 @@ const load = async () => {
       label: 'Settings',
       type: 'normal',
       click: () => {
-        SettingsWindowManager.open();
+        SettingsWindowManager.open({
+          path: '/',
+        });
       },
     },
     {

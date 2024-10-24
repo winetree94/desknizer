@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     element: <Navigate to='extensions' />,
   },
   {
-    path: '/hello',
+    path: '/welcome',
     element: <Webcome />,
   },
 ]);

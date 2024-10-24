@@ -14,11 +14,17 @@ import { NoteData } from '../shared/types.ts';
 import { useExtensionItems } from '@desknizer/ui/hooks/useExtensionItems';
 import { useNativeContextMenu } from '@desknizer/ui/hooks/useNativeContextMenu';
 import { Toolbar } from '@desknizer/ui/components/Toolbar.tsx';
+import { useState } from 'react';
 
 export function App() {
   const contents = useExtensionItems<NoteData>({
     extensionId: Meta.extensionConfigs.uuid,
   });
+  const [search, setSearch] = useState('');
+  const filteredContents = contents.filter((content) => {
+    return content.data.content.toLowerCase().includes(search.toLowerCase());
+  });
+
   const { open } = useNativeContextMenu<{ id: string }>({
     items: [
       {
@@ -71,12 +77,17 @@ export function App() {
       <Flex flex={1} direction='column' style={{ overflow: 'hidden' }}>
         <Flex pb='xs' pl='xs' pr='xs' direction='column'>
           <Text size='xl'>Notes</Text>
-          <Input mt='sm' placeholder='Search...' />
+          <Input
+            mt='sm'
+            placeholder='Search'
+            value={search}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+          />
         </Flex>
         <Divider />
         <ScrollArea flex={1} scrollbars='y' h='100%' pl='sm' pr='sm'>
           <Flex direction='column' gap='sm' pb='sm' pt='sm'>
-            {contents.map((content) => (
+            {filteredContents.map((content) => (
               <Card
                 key={content.id}
                 shadow='sm'
